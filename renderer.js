@@ -26,8 +26,7 @@ fs.exists(path.join(__dirname, 'f.zip'), function (exists) {
                 console.log(f);
             } else {
                 alert("Warn: Encorder has lost!");
-                debugger;
-                this.process = null;
+                //this.process = null;
             }
         });
     }
