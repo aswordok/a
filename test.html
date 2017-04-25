@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<style>
+    #div0 {
+        width: auto;
+        height: 30px;
+        background-color: #c3d9ff;
+    }
+
+    #div1 {
+        width: 30%;
+        height: 20px;
+        text-align: left;
+        background-color: #55AA55;
+        float: left;
+    }
+
+    #div2 {
+        width: 40%;
+        height: 20px;
+        text-align: center;
+        background-color: #559955;
+        float: left;
+    }
+
+    #div3 {
+        width: 30%;
+        height: 20px;
+        text-align: right;
+        background-color: #55AA55;
+        float: left;
+    }
+</style>
+<script src="jquery.min.js"></script>
+<script>
+    var o = {
+        name: 'xzx',
+        age: 100,
+        where: function () {
+            return "I'm here.";
+        }
+    }
+    o.constructor.prototype.sex = "male";
+    console.log(typeof(o));//object
+    console.log(o);
+    console.log(o.name);//xzx
+    console.log(o.sex);//mail
+    console.log(o.where());//I'm here.
+
+    function OO() {
+        this.name = "abc";
+        var age = 99;
+        this.where = function (n) {
+            return n;
+        }
+        OO.prototype.sex = "male";
+    }
+    var oo = new OO(), ooo = new OO();
+    console.log(typeof(oo));//object
+    console.log(oo);
+    console.log(oo.name);//abc
+    console.log(oo.age);//underfined,age为私有变量
+    console.log(oo.sex);//male
+    console.log(oo.sex);//male
+    console.log(oo.where(88));//88
+    console.log(oo.constructor === OO);//true
+</script>
+<body>
+<div id="div0">
+    <div id="div1">abc</div>
+    <div id="div2">def</div>
+    <div id="div3">ghi</div>
+</div>
+
+<select id="fileList" multiple=multiple>
+    <option value="1">a</option>
+    <option value="2">b</option>
+</select>
+<input type="button" value="获取所有option值"/>
+<script>
+    $(document).ready(function () {
+        $("button").click(function () {
+            console.log("start ...");
+            alert("Hello");
+            $("option").each(function () { //遍历全部option
+                var str = $(this).val(); //获取option的内容
+                alert(str);
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

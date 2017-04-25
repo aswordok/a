@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>流光 v3.0</title>
+    <link href="layout.css" rel="stylesheet" type="text/css"/>
+    <script>
+        window.$ = window.jQuery = require('./jquery.min.js');
+    </script>
+    <script src="prepare.js"></script>
+    <script src="menu.js"></script>
+  </head>
+  <body>
+    <fieldset id="list">
+      <legend>input</legend>
+      <select id="fileList" multiple=multiple>
+        <option value="dnd">drag & drop files here.</option>
+      </select>
+    </fieldset>
+    <button type="button" id="upBtn">↑</button>
+    <div id="cmd">
+      Author QQ:234107&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="">Help</a>
+      格式：<select id="codeList">
+        <option value="UHDmp2">超清TS流(mp2)</option>
+        <option value="UHDac3">超清TS流(ac3)</option>
+        <option value="HDmp2" selected = "selected">高清TS流(mp2)</option>
+        <option value="HDac3">高清TS流(ac3)</option>
+        <option value="SDts">标清TS流</option>
+        <option value="SDps">标清PS流</option>
+      </select>
+      <fieldset id="code">
+        <legend>Output code</legend>
+        <textarea id="codeInfo">
+mpeg-ts:CBR 7.5M
+video:
+  h.264 cbr6.7M 1920x1080i
+audio:
+  mp2 cbr128K
+        </textarea>
+      </fieldset>
+      <button type="button" class="cmdBtn" id="add">添加</button>
+      <button type="button" class="cmdBtn" id="del">删除</button>
+      <button type="button" class="cmdBtn" id="empty">清空</button>
+      <button type="button" class="cmdBtn" id="run">编码</button>
+    </div>
+    <div id="setting">
+      <div>
+        <input type="checkbox" name="checkLogo" id="checkLogo" />挂角：
+        <input type="text" name="logoAdd" id="logoAdd" />
+        <button type="button" class="setBtn" id="logoButton">浏览</button>
+        X:<input type="text" name="x" class="coor" value="1500" />Y:<input type="text" name="y" class="coor" value="780" />
+        <fieldset id="rotation">
+          <legend>旋转</legend>
+          <input type="radio" name="rotation" value="0" class="rotation" />90°
+          <input type="radio" name="rotation" value="1" class="rotation" />-90°
+          <input type="radio" name="rotation" value="2" class="rotation" />180
+        </fieldset>
+      </div>
+      <div>
+        <input type="checkbox" name="checkPre" id="checkPre" />前缀：
+        <input type="text" name="pre" class="prePostAdd" id="preAdd" />
+        <button type="button" class="setBtn" id="preBtn">浏览</button>
+        <input type="checkbox" name="checkPost" id="checkPost" />后缀：
+        <input type="text" name="post" class="prePostAdd" id="postAdd" />
+        <button type="button" class="setBtn" id="postBtn">浏览</button>
+      </div>
+      <div id="outDiv">
+        输出路径：<input type="text" name="outputAdd" id="outputAdd" />
+        <button type="button" class="setBtn" id="outputBtn">浏览</button>
+        <input type="checkbox" name="checkOutput" />输出到源路径
+      </div>
+    </div>
+    <div id="progress">
+      <div id="progressWalk">
+      </div>
+      <div id="progressText">
+        <div id="progressLeft">Encoding ...</div><div id="progressMiddle">0%</div><div id="progressRight">Uncompleted</div>
+      </div>
+    </div>
+    <fieldset id="info">
+      <legend>Output info</legend>
+        <textarea id="outInfo">
+output information
+        </textarea>
+    </fieldset>
+  </body>
+  <script>
+    // You can also require other files to run in this process
+    var render=require('./renderer.js');
+  </script>
+</html>

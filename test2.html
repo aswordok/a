@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test2</title>
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript">
+        $().ready(function () {
+            $("button").click(function () {
+                console.log($("#myList").eq(0).text());
+                $("option").each(function () { //遍历全部option
+                    var str = $(this).val(); //获取option的内容
+                    alert(str);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+ <select id="myList" multiple=multiple>
+    <option value="0">桃树</option>
+    <option value="1">梨树</option>
+    <option value="2">樟树</option>
+</select>
+<button>取值</button>
+</body>
+</html>

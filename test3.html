@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dialog</title>
+</head>
+<body>
+    <button id="openFile" onclick="openFile();">Open</button>
+    <button id="saveFile" onclick="saveFile();">Save</button><br />
+    <br />
+    <textarea id="editor" style="width: 400px; height: 300px;"></textarea>
+    <script>
+        //http://stackoverflow.com/questions/43103587/electron-after-browserify-fs-existssync-is-not-a-function
+        //https://github.com/electron/electron/blob/master/docs/api/dialog.md
+        const {dialog} = require('electron').remote;
+/*
+        function openFile () {
+            dialog.showOpenDialog(function (fileNames) {
+            });
+        }
+*/
+        var fs = require('fs');
+        function openFile () {
+            dialog.showOpenDialog(
+                {
+                    properties: [ 'multiSelections'],
+                    filters: [{name: 'text', extensions: ['txt']}]
+                },
+                function (fileNames) {
+                    if (!fileNames) return;
+                    var fileName = fileNames[0];
+                    fs.readFile(fileName, 'utf-8', function (err, data) {
+                        document.getElementById("editor").value = data;
+                    });
+                }
+            )
+        }
+        function saveFile () {
+            dialog.showSaveDialog(
+                {
+                    filters: [{name: 'text', extensions: ['txt']}]
+                },
+                function (fileName) {
+                    if (!fileName) return;
+                    fs.writeFile(fileName, document.getElementById("editor").value, function (err) {
+                        if(err){
+                            dialog.showErrorBox("Could not save the file", err.message);
+                        } else {
+                            console.log("saved file!");
+                        }
+                    });
+                }
+            )
+        }
+    </script>
+</body>
+</html>
