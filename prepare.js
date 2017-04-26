@@ -31,6 +31,10 @@ $().ready(function () {
     $("#run").click(function () {
             render.encoding();
     });
+    $("#test").click(function () {
+        alert("Warn: Exit now!");
+        render=null;
+    });
 
     $("#logoButton").click(function () {
         render.fillLogo();
