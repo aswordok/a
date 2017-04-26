@@ -21,6 +21,7 @@
     "electron": "^1.6.2"
   },
   "dependencies": {
-    "electron": "^1.6.2"
+    "electron": "^1.6.2",
+    "extract-zip": "^1.6.0"
   }
 }

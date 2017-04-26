@@ -10,28 +10,66 @@ const {app} = require('electron').remote;
 console.log("Get environmental path:");
 console.log(app.getPath('desktop'));
 console.log(app.getPath('temp'));
-
 const fs = require('fs');
 const path = require('path');
+let tmpFiles=[];
 fs.exists(path.join(__dirname, 'f.zip'), function (exists) {
     if (exists) {
         var f = path.join(__dirname, 'f.zip');
-        console.log("Found f:");
+        console.log("Found f.zip:");
         console.log(f);
+        cp(f);
     } else {
         fs.exists(path.join(__dirname, 'resources/app.asar/f.zip'), function (exists) {
             if (exists) {
                 var f = path.join(__dirname, 'resources/app.asar/f.zip');
-                console.log("Found f:");
+                console.log("Found f.zip:");
                 console.log(f);
+                cp(f);
             } else {
                 alert("Warn: Encorder has lost!");
-                //this.process = null;
+                alert("Warn: Exit now!");
+                app.quit();
             }
         });
     }
 });
+var temp=app.getPath('temp');
+let cp=function (f) {
+    const extract = require('extract-zip')
+    console.log("Now extract f.zip:");
+    extract(f, {dir: temp}, function (err) {
+        tmpFiles.push(f);
+        if (err){
+            console.log(err);
+            alert("Catch a error when extract the encorder!");
+            alert(err.message);
+            alert("Warn: Exit now!");
+            app.quit();
+        }
+    })
+};
 
+//clean the tmp files
+/*
+var filepath = "C:/Path-toFile/file.txt";// Previously saved path somewhere
+if (fs.existsSync(filepath)) {
+    fs.unlink(filepath, (err) => {
+        if (err) {
+            alert("An error ocurred updating the file" + err.message);
+            console.log(err);
+            return;
+        }
+        console.log("File succesfully deleted");
+    });
+} else {
+    alert("This file doesn't exist, cannot delete");
+}
+*/
+window.onbeforeunload = function (e) {
+    alert("Will exit!");
+    //return false; //阻止退出
+}
 
 const {dialog} = require('electron').remote;
 let selectFile = function (callback) {
@@ -123,6 +161,7 @@ function encoder() {
 
     const spawn = require('child_process').spawn;
     const ff = spawn('f.exe', ['-i', fIn, '-vcodec', 'libx264', '-acodec', 'mp2', '-f', 'mpegts', fOut]);
+    //手动杀掉spawn,参见：https://discuss.atom.io/t/quitting-electron-app-no-process-exit-event-or-window-unload-event-on-renderer/27363
     ff.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
     });

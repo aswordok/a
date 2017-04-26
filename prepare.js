@@ -33,7 +33,8 @@ $().ready(function () {
     });
     $("#test").click(function () {
         alert("Warn: Exit now!");
-        render=null;
+        const {app}=require("electron").remote;
+        app.quit();
     });
 
     $("#logoButton").click(function () {
