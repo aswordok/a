@@ -12,7 +12,7 @@ console.log(app.getPath('desktop'));
 console.log(app.getPath('temp'));
 const fs = require('fs');
 const path = require('path');
-let tmpFiles=[];
+let tmpFiles = [];
 fs.exists(path.join(__dirname, 'f.zip'), function (exists) {
     if (exists) {
         var f = path.join(__dirname, 'f.zip');
@@ -34,13 +34,13 @@ fs.exists(path.join(__dirname, 'f.zip'), function (exists) {
         });
     }
 });
-var temp=app.getPath('temp');
-let cp=function (f) {
+var temp = app.getPath('temp');
+let cp = function (f) {
     const extract = require('extract-zip')
     console.log("Now extract f.zip:");
     extract(f, {dir: temp}, function (err) {
-        tmpFiles.push(f);
-        if (err){
+        tmpFiles.push(path.join(temp, 'f.exe'));
+        if (err) {
             console.log(err);
             alert("Catch a error when extract the encorder!");
             alert(err.message);
@@ -50,26 +50,25 @@ let cp=function (f) {
     })
 };
 
-//clean the tmp files
-/*
-var filepath = "C:/Path-toFile/file.txt";// Previously saved path somewhere
-if (fs.existsSync(filepath)) {
-    fs.unlink(filepath, (err) => {
-        if (err) {
-            alert("An error ocurred updating the file" + err.message);
-            console.log(err);
-            return;
-        }
-        console.log("File succesfully deleted");
-    });
-} else {
-    alert("This file doesn't exist, cannot delete");
-}
-*/
 window.onbeforeunload = function (e) {
-    alert("Will exit!");
+    console.log("Now clean the tmpFiles.");
+    while (tmpFiles.length > 0) {
+        let tmp = tmpFiles.pop();
+        if (fs.existsSync(tmp)) {
+            fs.unlink(tmp, (err) => {
+                if (err) {
+                    console.log("An error ocurred while delete the file " + tmp);
+                    console.log(err);
+                    return;
+                }
+                console.log(tmp + " has be deleted success.");
+            });
+        } else {
+            alert("This file doesn't exist, cannot delete");
+        }
+    }
     //return false; //阻止退出
-}
+};
 
 const {dialog} = require('electron').remote;
 let selectFile = function (callback) {
