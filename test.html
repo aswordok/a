@@ -50,6 +50,7 @@
     console.log(o.name);//xzx
     console.log(o.sex);//mail
     console.log(o.where());//I'm here.
+    console.log("--------------------");
 
     function OO() {
         this.name = "abc";
@@ -64,10 +65,17 @@
     console.log(oo);
     console.log(oo.name);//abc
     console.log(oo.age);//underfined,age为私有变量
-    console.log(oo.sex);//male
-    console.log(oo.sex);//male
+    OO.prototype.sex="female";//共享变量
+    console.log(oo.sex);//female
+    console.log(ooo.sex);//female
     console.log(oo.where(88));//88
     console.log(oo.constructor === OO);//true
+    console.log("--------------------");
+
+    var obj= (str)=> {
+        return str;
+    }
+    console.log(obj("cat"));
 </script>
 <body>
 <div id="div0">
