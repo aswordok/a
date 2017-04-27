@@ -35,12 +35,12 @@ fs.exists(path.join(__dirname, 'f.zip'), function (exists) {
     }
 });
 let temp = app.getPath('temp');
-let f="";
+let f = "";
 let cp = function (fZip) {
     const extract = require('extract-zip')
     console.log("Now extract f.zip:");
     extract(fZip, {dir: temp}, function (err) {
-        f=path.join(temp, 'f.exe');
+        f = path.join(temp, 'f.exe');
         tmpFiles.push(path.join(temp, 'f.exe'));
         if (err) {
             console.log(err);
@@ -163,7 +163,7 @@ function encoder() {
     var fOut = "d:/user/desktop/myVideo_out.ts";
 
     const spawn = require('child_process').spawn;
-    fProcess = spawn(f, ['-i', fIn, '-vcodec', 'libx264', '-acodec', 'mp2', '-f', 'mpegts', fOut,'-y']);
+    fProcess = spawn(f, ['-i', fIn, '-vcodec', 'libx264', '-acodec', 'mp2', '-f', 'mpegts', fOut, '-y']);
     //手动杀掉spawn,参见：https://discuss.atom.io/t/quitting-electron-app-no-process-exit-event-or-window-unload-event-on-renderer/27363
     fProcess.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
@@ -185,8 +185,9 @@ exports.killSpawn = () => {
         fProcess = null;
     }
 };
-exports.help=()=>{
-    const {exec}=require("child_process");
+
+exports.help = () => {
+    const {exec} = require("child_process");
     exec("start http://115.28.2.167/streamer/help.html", function (error, stdout, stderr) {
         if (error) {
             console.log(error.message);

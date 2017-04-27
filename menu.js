@@ -54,6 +54,7 @@ let template = [{
         label: '获取机器码',
         accelerator: 'CmdOrCtrl+',
         click: function () {
+            alert(getMachineId());
         }
     }, {
         label: '注册状态',
