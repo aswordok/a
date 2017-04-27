@@ -72,10 +72,18 @@
     console.log(oo.constructor === OO);//true
     console.log("--------------------");
 
-    var obj= (str)=> {
-        return str;
-    }
-    console.log(obj("cat"));
+    ((str)=> {
+        console.log(str);
+    })("Hello world!");//Hello world!
+    console.log("--------------------");
+
+    var f={
+        name:"dog",
+        getName:(function () {
+            name="cat";
+        })()
+    };
+    console.log(f.name);//dog
 </script>
 <body>
 <div id="div0">
