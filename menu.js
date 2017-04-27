@@ -10,11 +10,10 @@ let template = [{
             $("#add").click();
         }
     }, {
-        label: '设置',
+        label: '清空',
         accelerator: 'Alt+s',
         click: function () {
-            let codeRate1=prompt("请输入视频码率：","6.7M");
-            let codeRate2=prompt("请输入音频码率：","128");
+            $("#empty").click();
         }
     }, {
         type: 'separator'
@@ -32,11 +31,13 @@ let template = [{
         label: '编码',
         accelerator: 'CmdOrCtrl+R',
         click: function () {
+            $("#run").click();
         }
     }, {
         label: '中止',
         accelerator: 'CmdOrCtrl+C',
         click: function () {
+            render.killSpawn();
         }
     }]
 }, {
@@ -45,6 +46,7 @@ let template = [{
         label: '帮助',
         accelerator: 'CmdOrCtrl+H',
         click: function () {
+            render.help();
         }
     }, {
         type: 'separator'

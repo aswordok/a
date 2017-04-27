@@ -15,17 +15,17 @@ const path = require('path');
 let tmpFiles = [];
 fs.exists(path.join(__dirname, 'f.zip'), function (exists) {
     if (exists) {
-        var f = path.join(__dirname, 'f.zip');
+        var fZip = path.join(__dirname, 'f.zip');
         console.log("Found f.zip:");
-        console.log(f);
-        cp(f);
+        console.log(fZip);
+        cp(fZip);
     } else {
         fs.exists(path.join(__dirname, 'resources/app.asar/f.zip'), function (exists) {
             if (exists) {
-                var f = path.join(__dirname, 'resources/app.asar/f.zip');
+                var fZip = path.join(__dirname, 'resources/app.asar/f.zip');
                 console.log("Found f.zip:");
-                console.log(f);
-                cp(f);
+                console.log(fZip);
+                cp(fZip);
             } else {
                 alert("Warn: Encorder has lost!");
                 alert("Warn: Exit now!");
@@ -34,11 +34,13 @@ fs.exists(path.join(__dirname, 'f.zip'), function (exists) {
         });
     }
 });
-var temp = app.getPath('temp');
-let cp = function (f) {
+let temp = app.getPath('temp');
+let f="";
+let cp = function (fZip) {
     const extract = require('extract-zip')
     console.log("Now extract f.zip:");
-    extract(f, {dir: temp}, function (err) {
+    extract(fZip, {dir: temp}, function (err) {
+        f=path.join(temp, 'f.exe');
         tmpFiles.push(path.join(temp, 'f.exe'));
         if (err) {
             console.log(err);
@@ -153,25 +155,41 @@ function fillOutputAct(fileNames) {
     $("#outputAdd").val(fileNames[0]);
 }
 
-//f.exe  -i "d:/user/desktop/myVideo.ts" -vcodec libx264 -acodec mp2 -f mpegts "d:/user/desktop/myVideo_out.ts"
+//f.exe  -i "d:/user/desktop/myVideo.ts" -vcodec libx264 -acodec mp2 -f mpegts "d:/user/desktop/myVideo_out.ts -y"
+//-y 输出覆盖
+let fProcess;
 function encoder() {
-    var fIn = "d:/user/desktop/myVideo.ts";
+    var fIn = "d:/user/desktop/myVideo.mp4";
     var fOut = "d:/user/desktop/myVideo_out.ts";
 
     const spawn = require('child_process').spawn;
-    const ff = spawn('f.exe', ['-i', fIn, '-vcodec', 'libx264', '-acodec', 'mp2', '-f', 'mpegts', fOut]);
+    fProcess = spawn(f, ['-i', fIn, '-vcodec', 'libx264', '-acodec', 'mp2', '-f', 'mpegts', fOut,'-y']);
     //手动杀掉spawn,参见：https://discuss.atom.io/t/quitting-electron-app-no-process-exit-event-or-window-unload-event-on-renderer/27363
-    ff.stdout.on('data', (data) => {
+    fProcess.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
     });
 
-    ff.stderr.on('data', (data) => {
+    fProcess.stderr.on('data', (data) => {
         console.log(`stderr: ${data}`);
     });
 
-    ff.on('close', (code) => {
+    fProcess.on('close', (code) => {
         console.log(`子进程退出码：${code}`);
     });
 }
-
 exports.encoding = encoder;
+exports.killSpawn = () => {
+    if (fProcess) {
+        console.log('killing encoder ...');
+        fProcess.kill('SIGTERM');//SIGTERM为结束信号
+        fProcess = null;
+    }
+};
+exports.help=()=>{
+    const {exec}=require("child_process");
+    exec("start http://115.28.2.167/streamer/help.html", function (error, stdout, stderr) {
+        if (error) {
+            console.log(error.message);
+        }
+    });
+};
