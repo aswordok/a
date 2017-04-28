@@ -59,7 +59,7 @@ let getMachineId = function () {
         let str = buff.toString();
         let arr = str.split(/[\r\n]/);
         for (let i = 1; i < arr.length; i++) {
-            if (arr[i].length != 0) {
+            if (arr[i].trim().length != 0) {
                 console.log(arr[i]);
                 tmpId += "|" + arr[i].trim();
             }
@@ -68,7 +68,7 @@ let getMachineId = function () {
         str = buff.toString();
         arr = str.split(/[\r\n]/);
         for (let i = 1; i < arr.length; i++) {
-            if (arr[i].length != 0) {
+            if (arr[i].trim().length != 0) {
                 console.log(arr[i]);
                 tmpId += "|" + arr[i].trim();
             }
@@ -77,7 +77,7 @@ let getMachineId = function () {
         str = buff.toString();
         arr = str.split(/[\r\n]/);
         for (let i = 1; i < arr.length; i++) {
-            if (arr[i].length != 0) {
+            if (arr[i].trim().length != 0) {
                 console.log(arr[i]);
                 tmpId += "|" + arr[i].trim();
             }
