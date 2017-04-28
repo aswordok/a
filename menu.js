@@ -62,7 +62,7 @@ let template = [{
     }, {
         label: '注册状态',
         click: function () {
-
+            checkRight(altRight);
         }
     }]
 }]

@@ -71,6 +71,7 @@ let getMachineId = function () {
             if (arr[i].trim().length != 0) {
                 console.log(arr[i]);
                 tmpId += "|" + arr[i].trim();
+                break;//只绑第一硬盘，防止挺入U盘
             }
         }
         buff = execSync("wmic baseboard get SerialNumber");
@@ -80,6 +81,7 @@ let getMachineId = function () {
             if (arr[i].trim().length != 0) {
                 console.log(arr[i]);
                 tmpId += "|" + arr[i].trim();
+                break;
             }
         }
     } catch (e) {
@@ -90,5 +92,49 @@ let getMachineId = function () {
         app.quit();
     }
     console.log(tmpId);
-    return tmpId;
+    const crypto = require('crypto');
+    let sha1 = crypto.createHash('sha1');
+    sha1.update(tmpId, 'utf8');
+    let hashId=sha1.digest("hex");
+    console.log(hashId);
+    return hashId;
 };
+
+function checkRight(callback) {
+    $.ajax({
+        type: 'get',
+        dataType: "json",//xml,html,script,json,jsonp,text
+        encode: "utf-8",
+        url: '/streamer/checkRight.js', // 需要提交的 url
+        data:data,
+        success: function (data) {
+            if (window.console){
+                console.log(typeof(data));
+                console.log(JSON.stringify(data));
+            }
+            callback(data);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            if (window.console){
+                console.log("数据加载失败：");
+                console.log(XMLHttpRequest.status);
+                console.log(XMLHttpRequest.readyState);
+                console.log(textStatus);//通常情况下textStatus和errorThrown只有其中一个包含信息
+                console.log(errorThrown);
+            }
+            alert("在线鉴权失败，请检查internet网路。","警告");
+        }
+    });
+}
+function altRight(data) {
+    if (!data["pay"]){
+        alert("本机未授权");
+        return;
+    }
+    let myDate = new Date();
+    if (data["validDate"]>myDate){
+        alert("你的授权有效期为："+data["validDate"].toLocaleDateString()+"\n\r当前有效。");
+    }else{
+        alert("你的授权有效期为："+data["validDate"].toLocaleDateString()+"\n\r当前失效。");
+    }
+}
