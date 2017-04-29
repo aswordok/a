@@ -76,13 +76,15 @@ function checkRight(callback) {
         type: 'get',
         dataType: "json",//xml,html,script,json,jsonp,text
         encode: "utf-8",
-        url: '/streamer/checkRight.js', // 需要提交的 url
-        data:data,
+        url: 'http://lightcloud.net.cn/streamer/access.js', // 需要提交的 url
+        data:{machineId:getMachineId()},
         success: function (data) {
             if (window.console){
                 console.log(typeof(data));
                 console.log(JSON.stringify(data));
             }
+            console.log("Show data of access:");
+            console.log(data);
             callback(data);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
