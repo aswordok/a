@@ -8,13 +8,14 @@
         window.$ = window.jQuery = require('./jquery.min.js');
     </script>
     <script src="prepare.js"></script>
+    <script src="picker.js"></script>
     <script src="menu.js"></script>
   </head>
   <body>
-    <fieldset id="list">
+    <fieldset id="fileList">
       <legend>input</legend>
-      <select id="fileList" multiple=multiple>
-        <option value="dnd">drag & drop files here.</option>
+      <select id="list" multiple=multiple>
+        <option value="dnd" class="lst">drag & drop files here.</option>
       </select>
     </fieldset>
     <button type="button" id="upBtn">↑</button>
@@ -42,13 +43,13 @@ audio:
       <button type="button" class="cmdBtn" id="del">删除</button>
       <button type="button" class="cmdBtn" id="empty">清空</button>
       <button type="button" class="cmdBtn" id="run">编码</button>
-      <button type="button" class="cmdBtn" id="test">测试</button>
+      <!--<button type="button" class="cmdBtn" id="test">测试</button>-->
     </div>
     <div id="setting">
       <div>
         <input type="checkbox" name="checkLogo" id="checkLogo" />挂角：
         <input type="text" name="logoAdd" id="logoAdd" />
-        <button type="button" class="setBtn" id="logoButton">浏览</button>
+        <button type="button" class="setBtn" id="logoBtn">浏览</button>
         X:<input type="text" name="x" class="coor" value="1500" />Y:<input type="text" name="y" class="coor" value="780" />
         <fieldset id="rotation">
           <legend>旋转</legend>

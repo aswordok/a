@@ -2,12 +2,17 @@
  * Created by user on 2017/4/15.
  */
 console.log("start prepare ...");
+let tmpFiles = [];
+
+$().ready(function () {
+    setDesk();
+})
 
 //alert($(window).width());
 $(window).resize(
     function () {
-        $("#list").height($(window).height() - 245);//496-(250-5)
-        $("#fileList").height($(window).height() - 265);//496-(236+29)
+        $("#fileList").height($(window).height() - 245);//496-(250-5)
+        $("#list").height($(window).height() - 265);//496-(236+29)
         $("#upBtn").height($(window).height() - 252);//496-(247+5)
         $("#code").height($(window).height() - 383);//496-(110+3)
         $("#codeInfo").height($(window).height() - 399);//496-(94+3)
@@ -16,40 +21,6 @@ $(window).resize(
         $("#outputAdd").width($(window).width() - 270);//784-(514-244)
     }
 );
-
-$().ready(function () {
-    $("#add").click(function () {
-        render.fillList();
-    });
-    $("#del").click(function () {
-        $("#fileList").find("option:selected").remove();
-    });
-    $("#empty").click(function () {
-        $("#fileList").empty();
-    });
-    $("#run").click(function () {
-        render.encoding();
-    });
-    $("#test").click(function () {
-        alert("Warn: Exit now!");
-        const {app} = require("electron").remote;
-        app.quit();
-    });
-
-    $("#logoButton").click(function () {
-        render.fillLogo();
-    });
-    $("#preBtn").click(function () {
-        render.fillPre();
-    });
-    $("#postBtn").click(function () {
-        render.fillPost();
-    });
-    $("#outputBtn").click(function () {
-        render.fillOutput();
-    });
-
-});
 
 let getMachineId = function () {
     let {execSync} = require('child_process');
@@ -138,3 +109,69 @@ function altRight(data) {
         alert("你的授权有效期为："+data["validDate"].toLocaleDateString()+"\n\r当前失效。");
     }
 }
+
+//清理临时文件
+window.onbeforeunload = function (e) {
+    console.log("Now clean the tmpFiles.");
+    while (tmpFiles.length > 0) {
+        let tmp = tmpFiles.pop();
+        if (fs.existsSync(tmp)) {
+            fs.unlink(tmp, (err) => {
+                if (err) {
+                    console.log("An error ocurred while delete the file " + tmp);
+                    console.log(err);
+                    return;
+                }
+                console.log(tmp + " has be deleted success.");
+            });
+        } else {
+            alert("This file doesn't exist, cannot delete");
+        }
+    }
+    //e.returnValue = false;//官方写法，与下一条二选一
+    //return false; //阻止退出
+};
+
+//unzip f.exe
+//参考https://github.com/maxogden/extract-zip
+const {app} = require('electron').remote;
+const fs = require('fs');
+const path = require('path');
+fs.exists(path.join(__dirname, 'f.zip'), function (exists) {
+    if (exists) {
+        var fZip = path.join(__dirname, 'f.zip');
+        console.log("Found f.zip:");
+        console.log(fZip);
+        cp(fZip);
+    } else {
+        fs.exists(path.join(__dirname, 'resources/app.asar/f.zip'), function (exists) {
+            if (exists) {
+                var fZip = path.join(__dirname, 'resources/app.asar/f.zip');
+                console.log("Found f.zip:");
+                console.log(fZip);
+                cp(fZip);
+            } else {
+                alert("Warn: Encorder has lost!");
+                alert("Warn: Exit now!");
+                app.quit();
+            }
+        });
+    }
+});
+let temp = app.getPath('temp');
+let f = "";
+let cp = function (fZip) {
+    const extract = require('extract-zip')
+    console.log("Now extract f.zip:");
+    extract(fZip, {dir: temp}, function (err) {
+        f = path.join(temp, 'f.exe');
+        tmpFiles.push(path.join(temp, 'f.exe'));
+        if (err) {
+            console.log(err);
+            alert("Catch a error when extract the encorder!");
+            alert(err.message);
+            alert("Warn: Exit now!");
+            app.quit();
+        }
+    })
+};

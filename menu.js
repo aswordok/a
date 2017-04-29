@@ -65,54 +65,63 @@ let template = [{
             checkRight(altRight);
         }
     }]
-}]
+}];
 const {remote} = require('electron');//{变量名}是ES6中新语法，叫解构
 const {Menu, MenuItem} = remote;
-var mainMenu = Menu.buildFromTemplate(template);
+let mainMenu = Menu.buildFromTemplate(template);
 Menu.setApplicationMenu(mainMenu);
 
-var contextMenu = new Menu();
+//绑定全局泡泡
+let contextMenu = new Menu();
 contextMenu.append(new MenuItem({
     label: '添加', click: function () {
-        $("input").val("abcde");
+        $("#add").click();
     }
 }));
 contextMenu.append(new MenuItem({type: 'separator'}));
 contextMenu.append(new MenuItem({
-    label: '转码', click: function () {
-        pop();
+    label: '编码', click: function () {
+        $("#run").click();
     }
 }));
 window.addEventListener('contextmenu', function (e) {
+    console.log("Bind window popup menu.");
     e.preventDefault();//阻止默认动作
     contextMenu.popup(remote.getCurrentWindow(e.sender));
 }, false);
 
-var contextMenuList = new Menu();
+//list泡泡
+let contextMenuList = new Menu();
 contextMenuList.append(new MenuItem({
     label: '添加', click: function () {
-        $("input").val("abcde");
+        $("#add").click();
     }
 }));
 contextMenuList.append(new MenuItem({
     label: '删除', click: function () {
-        pop();
+        $("#del").click();
     }
 }));
 contextMenuList.append(new MenuItem({
     label: '清空', click: function () {
-        pop();
+        $("#empty").click();
     }
 }));
 contextMenuList.append(new MenuItem({type: 'separator'}));
 contextMenuList.append(new MenuItem({
     label: '优先', click: function () {
-        pop();
+        $("#upBtn").click();
+    }
+}));
+contextMenuList.append(new MenuItem({type: 'separator'}));
+contextMenuList.append(new MenuItem({
+    label: '编码', click: function () {
+        $("#run").click();
     }
 }));
 $(document).ready(function () {
         const listArea = document.getElementById('list');//放到ready中，或放在html最后，否则值为null
-        console.log("Bind popup menu.");
+        console.log("Bind list popup menu:");
         console.log(listArea);
         listArea.addEventListener('contextmenu', function (e) {
             e.preventDefault();
@@ -123,25 +132,90 @@ $(document).ready(function () {
     }
 );
 
-var contextMenuOutput = new Menu();
+//output泡泡
+let contextMenuOutput = new Menu();
 contextMenuOutput.append(new MenuItem({
     label: '浏览', click: function () {
-        $("input").val("abcde");
+        $("#outputBtn").click();
     }
 }));
 contextMenuOutput.append(new MenuItem({type: 'separator'}));
 contextMenuOutput.append(new MenuItem({
     label: '桌面', click: function () {
-        pop();
+        setDesk();
     }
 }));
 $(document).ready(function () {
         const outputArea = document.getElementById('outputAdd');
-        console.log("Bind popup menu.");
+        console.log("Bind popup menu:");
         console.log(outputArea);
         outputArea.addEventListener('contextmenu', function (e) {
             e.preventDefault();
             contextMenuOutput.popup(remote.getCurrentWindow(e.sender));
+            if (!e) window.event.cancelBubble = true;//微软模型阻止冒泡
+            if (e.stopPropagation) e.stopPropagation();//w3c模型阻止冒泡
+        }, false);
+    }
+);
+function setDesk() {//提升
+    const {app} = require('electron').remote;
+    $("#outputAdd").val(app.getPath('desktop'));
+}
+
+//logo泡泡
+let contextMenuLogo = new Menu();
+contextMenuLogo.append(new MenuItem({
+    label: '浏览', click: function () {
+        $("#logoBtn").click();
+    }
+}));
+$(document).ready(function () {
+        const logoArea = document.getElementById('logoAdd');
+        console.log("Bind logo popup menu:");
+        console.log(logoArea);
+        logoArea.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+            contextMenuLogo.popup(remote.getCurrentWindow(e.sender));
+            if (!e) window.event.cancelBubble = true;//微软模型阻止冒泡
+            if (e.stopPropagation) e.stopPropagation();//w3c模型阻止冒泡
+        }, false);
+    }
+);
+
+//pre泡泡
+let contextMenuPre = new Menu();
+contextMenuPre.append(new MenuItem({
+    label: '浏览', click: function () {
+        $("#preBtn").click();
+    }
+}));
+$(document).ready(function () {
+        const preArea = document.getElementById('preAdd');
+        console.log("Bind pre popup menu:");
+        console.log(preArea);
+        preArea.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+            contextMenuPre.popup(remote.getCurrentWindow(e.sender));
+            if (!e) window.event.cancelBubble = true;//微软模型阻止冒泡
+            if (e.stopPropagation) e.stopPropagation();//w3c模型阻止冒泡
+        }, false);
+    }
+);
+
+//post泡泡
+let contextMenuPost = new Menu();
+contextMenuPost.append(new MenuItem({
+    label: '浏览', click: function () {
+        $("#postBtn").click();
+    }
+}));
+$(document).ready(function () {
+        const postArea = document.getElementById('postAdd');
+        console.log("Bind post popup menu:");
+        console.log(postArea);
+        postArea.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+            contextMenuPost.popup(remote.getCurrentWindow(e.sender));
             if (!e) window.event.cancelBubble = true;//微软模型阻止冒泡
             if (e.stopPropagation) e.stopPropagation();//w3c模型阻止冒泡
         }, false);
