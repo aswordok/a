@@ -6,7 +6,7 @@ let tmpFiles = [];
 
 $().ready(function () {
     setDesk();
-})
+});
 
 //alert($(window).width());
 $(window).resize(
@@ -100,7 +100,7 @@ function checkRight(callback) {
     });
 }
 function altRight(data) {
-    if (!data["pay"]){
+    if (!data["trail"]){
         alert("本机未授权");
         return;
     }
