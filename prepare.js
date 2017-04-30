@@ -79,12 +79,11 @@ function checkRight(callback) {
         url: 'http://lightcloud.net.cn/streamer/access.js', // 需要提交的 url
         data:{machineId:getMachineId()},
         success: function (data) {
-            if (window.console){
-                console.log(typeof(data));
-                console.log(JSON.stringify(data));
+            if(!window.console){
+                window.console = {log : function(){}};
             }
             console.log("Show data of access:");
-            console.log(data);
+            console.log(JSON.stringify(data));
             callback(data);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -100,15 +99,18 @@ function checkRight(callback) {
     });
 }
 function altRight(data) {
-    if (!data["trail"]){
+    if (!data[0]["trail"]){
         alert("本机未授权");
         return;
     }
     let myDate = new Date();
-    if (data["validDate"]>myDate){
-        alert("你的授权有效期为："+data["validDate"].toLocaleDateString()+"\n\r当前有效。");
+    let myValidData=new Date(data[0]["validDate"]);
+    console.log("Valid date:");
+    console.log(myValidData.toLocaleDateString());
+    if (data[0]["validDate"]>myDate){
+        alert("你的授权有效期为："+myValidData+"\n\r当前有效。");
     }else{
-        alert("你的授权有效期为："+data["validDate"].toLocaleDateString()+"\n\r当前失效。");
+        alert("你的授权有效期为："+myValidData+"\n\r当前失效。");
     }
 }
 
