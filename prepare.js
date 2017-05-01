@@ -66,7 +66,7 @@ let getMachineId = function () {
     const crypto = require('crypto');
     let sha1 = crypto.createHash('sha1');
     sha1.update(tmpId, 'utf8');
-    let hashId=sha1.digest("hex");
+    let hashId = sha1.digest("hex");
     console.log(hashId);
     return hashId;
 };
@@ -77,41 +77,49 @@ function checkRight(callback) {
         dataType: "json",//xml,html,script,json,jsonp,text
         encode: "utf-8",
         url: 'http://lightcloud.net.cn/streamer/access.js', // 需要提交的 url
-        data:{machineId:getMachineId()},
+        data: {machineId: getMachineId()},
         success: function (data) {
-            if(!window.console){
-                window.console = {log : function(){}};
+            if (!window.console) {
+                window.console = {
+                    log: function () {
+                    }
+                };
             }
-            console.log("Show data of access:");
+            console.log("Show data of fetch:");
             console.log(JSON.stringify(data));
+            console.log("args for encoder:");
+            console.log(JSON.stringify(data[1]));
             callback(data);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            if (window.console){
+            if (window.console) {
                 console.log("数据加载失败：");
                 console.log(XMLHttpRequest.status);
                 console.log(XMLHttpRequest.readyState);
                 console.log(textStatus);//通常情况下textStatus和errorThrown只有其中一个包含信息
                 console.log(errorThrown);
             }
-            alert("在线鉴权失败，请检查internet网路。","警告");
+            alert("在线鉴权失败，请检查internet网路。", "警告");
         }
     });
 }
 function altRight(data) {
-    if (!data[0]["trail"]){
-        alert("本机未授权");
-        return;
-    }
-    let myDate = new Date();
-    let myValidData=new Date(data[0]["validDate"]);
+    let curDate = new Date();
+    let myValidData = new Date(data[0]["validDate"]);
     console.log("Valid date:");
     console.log(myValidData.toLocaleDateString());
-    if (data[0]["validDate"]>myDate){
-        alert("你的授权有效期为："+myValidData+"\n\r当前有效。");
-    }else{
-        alert("你的授权有效期为："+myValidData+"\n\r当前失效。");
+    console.log("Is date?");
+    console.log(myValidData instanceof Date);//判断是不是日期
+    if (myValidData >= curDate) {
+        alert("你的授权有效期为：" + myValidData.toLocaleDateString() + "\n\r当前有效。", "授权检查");
+        return;
     }
+    if (data[0]["trail"]){//试用
+        alert("你的授权有效期为：" + myValidData.toLocaleDateString() + "\n\r当前失效,目前试用状态。", "授权检查");
+    }else{//过期且关闭试用
+        alert("本机未授权！", "授权检查");
+    }
+    register();
 }
 
 //清理临时文件
@@ -179,3 +187,21 @@ let cp = function (fZip) {
         }
     })
 };
+
+function help() {
+    const {exec} = require("child_process");
+    exec("start http://lightcloud.net.cn/streamer/help.html", function (error, stdout, stderr) {
+        if (error) {
+            console.log(error.message);
+        }
+    });
+}
+
+function register() {
+    const {exec} = require("child_process");
+    exec("start http://lightcloud.net.cn/streamer/register.html", function (error, stdout, stderr) {
+        if (error) {
+            console.log(error.message);
+        }
+    });
+}

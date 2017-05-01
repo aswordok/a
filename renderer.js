@@ -34,12 +34,3 @@ exports.killSpawn = () => {
         fProcess = null;
     }
 };
-
-exports.help = () => {
-    const {exec} = require("child_process");
-    exec("start http://115.28.2.167/streamer/help.html", function (error, stdout, stderr) {
-        if (error) {
-            console.log(error.message);
-        }
-    });
-};

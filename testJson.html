@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test json</title>
+</head>
+<script>
+    var obj={name:"bo bo",age:18};
+    var jsonStr=JSON.stringify(obj);
+    document.write(obj);
+    document.write("<br />");
+    document.write(jsonStr);
+    document.write("<br />");
+    document.write("jsonStr is json object:");
+    document.write(isJson(jsonStr));
+    document.write("<br />");
+    document.write("obj is json object:");
+    document.write(isJson(obj));
+    document.write("<br />");
+    document.write("-------------------");
+    document.write("<br />");
+    var jsonObj=JSON.parse(jsonStr);
+    document.write(jsonObj);
+    document.write("<br />");
+    document.write(JSON.stringify(jsonObj));
+    document.write("<br />");
+    document.write("Is json object:");
+    document.write(isJson(jsonObj));
+
+    function isJson(obj) {
+        var isjson = typeof(obj) == "object" && Object.prototype.toString.call(obj).toLowerCase() == "[object object]" && !obj.length;
+        return isjson;
+    }
+</script>
+<body>
+
+</body>
+</html>

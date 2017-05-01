@@ -46,7 +46,7 @@ let template = [{
         label: '帮助',
         accelerator: 'CmdOrCtrl+H',
         click: function () {
-            render.help();
+            help();
         }
     }, {
         type: 'separator'
