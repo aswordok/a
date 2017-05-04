@@ -77,7 +77,7 @@ function checkRight(callback) {
         dataType: "json",//xml,html,script,json,jsonp,text
         encode: "utf-8",
         url: 'http://lightcloud.net.cn/streamer/access.js', // 需要提交的 url
-        data: {machineId: getMachineId()},
+        data: {machineId: getMachineId(),ver:"3.0"},
         success: function (data) {
             if (!window.console) {
                 window.console = {
@@ -112,12 +112,24 @@ function altRight(data) {
     console.log(myValidData instanceof Date);//判断是不是日期
     if (myValidData >= curDate) {
         alert("你的授权有效期为：" + myValidData.toLocaleDateString() + "\n\r当前有效。", "授权检查");
-        return;
-    }
-    if (data[0]["trail"]){//试用
+    }else if (data[0]["trail"]){//试用
         alert("你的授权有效期为：" + myValidData.toLocaleDateString() + "\n\r当前失效,目前试用状态。", "授权检查");
     }else{//过期且关闭试用
         alert("本机未授权！", "授权检查");
+    }
+    if (data[0]["alert"]!=null && data[0]["alert"].trim().length>0){
+        alert(data[0]["alert"],"提示");
+    }
+    if (data[0]["pop"]!=null && data[0]["pop"].trim().length>0){
+        const {exec} = require("child_process");
+        exec("start "+data[0]["pop"], function (error, stdout, stderr) {
+            if (error) {
+                console.log(error.message);
+            }
+        });
+    }
+    if (myValidData >= curDate) {
+        return;
     }
     register();
 }
