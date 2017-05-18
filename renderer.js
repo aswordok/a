@@ -12,7 +12,7 @@ function encoder() {
     var fOut = "d:/user/desktop/myVideo_out.ts";
 
     $("#outInfo").empty();
-    const spawn = require('child_process').spawn;
+    const spawn = require('child_process').spawn; //HTML5的Web Worker是在客户端开线程的另一方法，示例：http://blog.jobbole.com/30592/
     fProcess = spawn(f, ['-i', fIn, '-vcodec', 'libx264', '-acodec', 'mp2', '-f', 'mpegts', fOut, '-y']);
     //手动杀掉spawn,参见：https://discuss.atom.io/t/quitting-electron-app-no-process-exit-event-or-window-unload-event-on-renderer/27363
     fProcess.stdout.on('data', (data) => {
