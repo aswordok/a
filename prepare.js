@@ -79,7 +79,7 @@ function checkRight(callback) {
         url: 'http://lightcloud.net.cn/streamer/access.js', // 需要提交的 url
         data: {machineId: getMachineId(),ver:"3.0"},
         success: function (data) {
-            if (!window.console) {
+            if (!window.console) {//如果console不存在，定义它的空函数
                 window.console = {
                     log: function () {
                     }
