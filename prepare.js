@@ -23,12 +23,13 @@ $().ready(function () {
             console.log("Show data of code list:");
             console.log(JSON.stringify(data));
             //document.write(JSON.stringify(data));
+            let i=data.pop().default;
             for (let i in data){
                 console.log(data[i]);
                 $("#codeList").append("<option value=" + data[i].value + ">"+ data[i].text +"</option>");
             }
-            $("#codeList").val(data[2].value);
-            $("#codeInfo").html(data[2].description);
+            $("#codeList").val(data[i].value);
+            $("#codeInfo").html(data[i].description);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             if (window.console) {
@@ -40,8 +41,8 @@ $().ready(function () {
             }
             console.log("获取数据失败，请检查internet网路。");
             alert("获取数据失败，请检查internet网路。","警告");
-            const {app} = require('electron').remote;
-            app.quit();
+            /*const {app} = require('electron').remote;
+            app.quit();*/
         }
     });
 });
