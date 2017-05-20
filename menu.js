@@ -120,8 +120,8 @@ contextMenuList.append(new MenuItem({
     }
 }));
 $(document).ready(function () {
-        const listArea = document.getElementById('list');//放到ready中，或放在html最后，否则值为null
-        console.log("Bind list popup menu:");
+        const listArea = document.getElementById('fileList');//放到ready中，或放在html最后，否则值为null
+        console.log("Bind fileList popup menu:");
         console.log(listArea);
         listArea.addEventListener('contextmenu', function (e) {
             e.preventDefault();

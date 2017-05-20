@@ -7,10 +7,10 @@ $().ready(function () {
         fillList();
     });
     $("#del").click(function () {
-        $("#list").find("option:selected").remove();
+        $("#fileList").find("option:selected").remove();
     });
     $("#empty").click(function () {
-        $("#list").empty();
+        $("#fileList").empty();
     });
     $("#run").click(function () {
         let data=checkRight(passRight);
@@ -27,7 +27,7 @@ $().ready(function () {
      });*/
 
     $("#upBtn").click(function () {
-        $("#list").find(":selected").each(function(){
+        $("#fileList").find(":selected").each(function(){
             $(this).insertBefore($('.lst:first'));
         });
     });
@@ -48,7 +48,7 @@ $().ready(function () {
 
 //拖放文件
 $().ready(function () {
-    bindDrop(document.getElementById('list'), fillListAct);
+    bindDrop(document.getElementById('fileList'), fillListAct);
     bindDrop(document.getElementById('logoAdd'), fillLogoAct);
     bindDrop(document.getElementById('preAdd'), fillPreAct);
     bindDrop(document.getElementById('postAdd'), fillPostAct);
@@ -123,11 +123,11 @@ let selectDirectory = function (callback) {
 };
 
 function fillListAct(fileNames) {//提升
-    if ($("#list option:first").val() == "dnd") { //drag & drop files here.
-        $("#list").empty();
+    if ($("#fileList option:first").val() == "dnd") { //drag & drop files here.
+        $("#fileList").empty();
     }
     for (let i in fileNames) {
-        $("#list").append("<option value='" + fileNames[i] + "'  class='lst'>" + fileNames[i] + "</option>");
+        $("#fileList").append("<option value='" + fileNames[i] + "'  class='lst'>" + fileNames[i] + "</option>");
     }
 }
 function fillLogoAct(fileNames) {

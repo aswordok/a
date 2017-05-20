@@ -28,7 +28,7 @@ $().ready(function () {
                 $("#codeList").append("<option value=" + data[i].value + ">"+ data[i].text +"</option>");
             }
             $("#codeList").val(data[2].value);
-            $("#code").html(data[2].description);
+            $("#codeInfo").html(data[2].description);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             if (window.console) {
@@ -49,8 +49,8 @@ $().ready(function () {
 //alert($(window).width());
 $(window).resize(
     function () {
-        $("#fileList").height($(window).height() - 245);//496-(250-5)
-        $("#list").height($(window).height() - 265);//496-(236+29)
+        $("#list").height($(window).height() - 245);//496-(250-5)
+        $("#fileList").height($(window).height() - 265);//496-(236+29)
         $("#upBtn").height($(window).height() - 252);//496-(247+5)
         $("#code").height($(window).height() - 383);//496-(110+3)
         $("#codeInfo").height($(window).height() - 399);//496-(94+3)
