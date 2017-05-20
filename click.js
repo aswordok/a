@@ -13,12 +13,7 @@ $().ready(function () {
         $("#fileList").empty();
     });
     $("#run").click(function () {
-        let data=checkRight(passRight);
-        if (data.length>0){
-            render.encoding(data);
-        }else {
-            console.log("Fetch nothing when check right!");
-        }
+        checkRight(passRightCallEncoding);
     });
     /*$("#test").click(function () {
      alert("Warn: Exit now!");

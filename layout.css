@@ -101,7 +101,7 @@ body {
     margin: 0;
     padding: 0;
     height: 15px;
-    width: 30%;
+    width: 0.1%;/*进度条*/
     background: #5A5;
 }
 #progressText{

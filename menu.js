@@ -60,6 +60,11 @@ let template = [{
             alert("机器码：\n\r"+machineId+"\n\r已放入到剪贴板中。","提示");
         }
     }, {
+        label: '软件注册',
+        click: function () {
+            register();
+        }
+    }, {
         label: '注册状态',
         click: function () {
             checkRight(altRight);

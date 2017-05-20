@@ -3,6 +3,7 @@
  */
 console.log("start prepare ...");
 let tmpFiles = [];
+let codeList=[];
 
 $().ready(function () {
     setDesk();
@@ -13,6 +14,7 @@ $().ready(function () {
         dataType: "json",//xml,html,script,json,jsonp,text
         encode: "utf-8",
         url: 'http://lightcloud.net.cn/streamer/encoder.json', // 需要提交的 url
+        // data: {refresh: Math.random()},//强制刷新
         success: function (data) {
             if (!window.console) {//如果console不存在，定义它的空函数
                 window.console = {
@@ -24,6 +26,7 @@ $().ready(function () {
             console.log(JSON.stringify(data));
             //document.write(JSON.stringify(data));
             let i=data.pop().default;
+            codeList=data;
             for (let i in data){
                 console.log(data[i]);
                 $("#codeList").append("<option value=" + data[i].value + ">"+ data[i].text +"</option>");
@@ -40,9 +43,32 @@ $().ready(function () {
                 console.log(errorThrown);
             }
             console.log("获取数据失败，请检查internet网路。");
-            alert("获取数据失败，请检查internet网路。","警告");
+            document.write("获取数据失败，请检查internet网路。");
             /*const {app} = require('electron').remote;
             app.quit();*/
+        }
+    });
+
+    $("select#codeList").change(function(){
+        console.log($(this).val());
+        switch ($(this).val()){
+            case "UHDmp2":
+                $("#codeInfo").html(codeList[0].description);
+                break;
+            case "UHDac3":
+                $("#codeInfo").html(codeList[1].description);
+                break;
+            case "HDmp2":
+                $("#codeInfo").html(codeList[2].description);
+                break;
+            case "HDac3":
+                $("#codeInfo").html(codeList[3].description);
+                break;
+            case "SDts":
+                $("#codeInfo").html(codeList[4].description);
+                break;
+            default:
+                $("#codeInfo").html(codeList[5].description);
         }
     });
 });
@@ -126,8 +152,6 @@ function checkRight(callback) {
             }
             console.log("Show data of fetch:");
             console.log(JSON.stringify(data));
-            console.log("args for encoder:");
-            console.log(JSON.stringify(data[1]));
             callback(data);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -139,7 +163,6 @@ function checkRight(callback) {
                 console.log(errorThrown);
             }
             alert("在线鉴权失败，请检查internet网路。", "警告");
-            return [];
         }
     });
 }
@@ -168,13 +191,9 @@ function altRight(data) {
             }
         });
     }
-    if (myValidData >= curDate) {
-        return;
-    }
-    register();
 }
 
-function passRight(data) {
+function passRightCallEncoding(data) {
     let curDate = new Date();
     let myValidData = new Date(data[0]["validDate"]);
     console.log("Valid date:");
@@ -188,7 +207,7 @@ function passRight(data) {
     if (data[0]["alert"]!=null && data[0]["alert"].trim().length>0){
         alert(data[0]["alert"],"提示");
     }
-    if (data[0]["pop"]!=null && data[0]["pop"].trim().length>0){
+    if (data[0]["pop"]!=null && data[0]["pop"].trim().length>0){ //不能弹双窗？
         const {exec} = require("child_process");
         exec("start "+data[0]["pop"], function (error, stdout, stderr) {
             if (error) {
@@ -196,10 +215,15 @@ function passRight(data) {
             }
         });
     }
-    if (data.length=1){
-        return [];
+    if (data.length==1){
+        console.log("Can't fetch args for encoding,data.length:");
+        console.log(data.length);
+        return;
     }else {
-        return data.shift();
+        let enData=data.pop();
+        console.log("Data for endcoding:");
+        console.log(JSON.stringify(enData));
+        //render.encoding(enData);
     }
 }
 
@@ -218,7 +242,7 @@ window.onbeforeunload = function (e) {
                 console.log(tmp + " has be deleted success.");
             });
         } else {
-            alert("This file doesn't exist, cannot delete");
+            console.log("This file doesn't exist, cannot delete");
         }
     }
     //e.returnValue = false;//官方写法，与下一条二选一
