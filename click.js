@@ -13,7 +13,12 @@ $().ready(function () {
         $("#list").empty();
     });
     $("#run").click(function () {
-        render.encoding();
+        let data=checkRight(passRight);
+        if (data.length>0){
+            render.encoding(data);
+        }else {
+            console.log("Fetch nothing when check right!");
+        }
     });
     /*$("#test").click(function () {
      alert("Warn: Exit now!");

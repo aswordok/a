@@ -6,6 +6,44 @@ let tmpFiles = [];
 
 $().ready(function () {
     setDesk();
+
+    //for coode list
+    $.ajax({
+        type: 'get',
+        dataType: "json",//xml,html,script,json,jsonp,text
+        encode: "utf-8",
+        url: 'http://lightcloud.net.cn/streamer/encoder.json', // 需要提交的 url
+        success: function (data) {
+            if (!window.console) {//如果console不存在，定义它的空函数
+                window.console = {
+                    log: function () {
+                    }
+                };
+            }
+            console.log("Show data of code list:");
+            console.log(JSON.stringify(data));
+            //document.write(JSON.stringify(data));
+            for (let i in data){
+                console.log(data[i]);
+                $("#codeList").append("<option value=" + data[i].value + ">"+ data[i].text +"</option>");
+            }
+            $("#codeList").val(data[2].value);
+            $("#code").html(data[2].description);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            if (window.console) {
+                console.log("数据加载失败：");
+                console.log(XMLHttpRequest.status);
+                console.log(XMLHttpRequest.readyState);
+                console.log(textStatus);//通常情况下textStatus和errorThrown只有其中一个包含信息
+                console.log(errorThrown);
+            }
+            console.log("获取数据失败，请检查internet网路。");
+            alert("获取数据失败，请检查internet网路。","警告");
+            const {app} = require('electron').remote;
+            app.quit();
+        }
+    });
 });
 
 //alert($(window).width());
@@ -100,6 +138,7 @@ function checkRight(callback) {
                 console.log(errorThrown);
             }
             alert("在线鉴权失败，请检查internet网路。", "警告");
+            return [];
         }
     });
 }
@@ -132,6 +171,35 @@ function altRight(data) {
         return;
     }
     register();
+}
+
+function passRight(data) {
+    let curDate = new Date();
+    let myValidData = new Date(data[0]["validDate"]);
+    console.log("Valid date:");
+    console.log(myValidData.toLocaleDateString());
+    console.log("Is date?");
+    console.log(myValidData instanceof Date);//判断是不是日期
+    if (myValidData >= curDate || data[0]["trail"]) {
+    }else{//过期且关闭试用
+        alert("本机未授权！", "授权检查");
+    }
+    if (data[0]["alert"]!=null && data[0]["alert"].trim().length>0){
+        alert(data[0]["alert"],"提示");
+    }
+    if (data[0]["pop"]!=null && data[0]["pop"].trim().length>0){
+        const {exec} = require("child_process");
+        exec("start "+data[0]["pop"], function (error, stdout, stderr) {
+            if (error) {
+                console.log(error.message);
+            }
+        });
+    }
+    if (data.length=1){
+        return [];
+    }else {
+        return data.shift();
+    }
 }
 
 //清理临时文件
