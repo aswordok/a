@@ -42,7 +42,7 @@ $().ready(function () {
                 console.log(textStatus);//通常情况下textStatus和errorThrown只有其中一个包含信息
                 console.log(errorThrown);
             }
-            console.log("获取数据失败，请检查internet网路。");
+            //console.log("获取数据失败，请检查internet网路。");
             document.write("获取数据失败，请检查internet网路。");
             /*const {app} = require('electron').remote;
             app.quit();*/
@@ -162,7 +162,7 @@ function checkRight(callback) {
                 console.log(textStatus);//通常情况下textStatus和errorThrown只有其中一个包含信息
                 console.log(errorThrown);
             }
-            alert("在线鉴权失败，请检查internet网路。", "警告");
+            document.write("在线鉴权失败，请检查internet网路。");
         }
     });
 }
@@ -302,9 +302,9 @@ function help() {
     });
 }
 
-function register() {
+function register(id) {
     const {exec} = require("child_process");
-    exec("start http://lightcloud.net.cn/streamer/register.html", function (error, stdout, stderr) {
+    exec("start http://lightcloud.net.cn/streamer/register.html?machineId="+id, function (error, stdout, stderr) {
         if (error) {
             console.log(error.message);
         }

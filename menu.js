@@ -11,7 +11,7 @@ let template = [{
         }
     }, {
         label: '清空',
-        accelerator: 'Alt+s',
+        accelerator: 'Alt+E',
         click: function () {
             $("#empty").click();
         }
@@ -51,21 +51,15 @@ let template = [{
     }, {
         type: 'separator'
     }, {
-        label: '获取机器码',
-        accelerator: 'CmdOrCtrl+',
+        label: '软件注册',
         click: function () {
             let machineId=getMachineId();
             const clipboard = require('electron').clipboard;
             clipboard.writeText(machineId);
-            alert("机器码：\n\r"+machineId+"\n\r已放入到剪贴板中。","提示");
+            register(machineId);
         }
     }, {
-        label: '软件注册',
-        click: function () {
-            register();
-        }
-    }, {
-        label: '注册状态',
+        label: '注册查询',
         click: function () {
             checkRight(altRight);
         }

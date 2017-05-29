@@ -13,6 +13,11 @@ $().ready(function () {
         $("#fileList").empty();
     });
     $("#run").click(function () {
+        $("#codeList").attr("disabled", true);
+        $("#run").attr("disabled", true);
+        $("#setting input").attr("disabled", true);
+        $("#setting button").attr("disabled", true);
+
         checkRight(passRightCallEncoding);
     });
     /*$("#test").click(function () {
@@ -126,7 +131,11 @@ function fillListAct(fileNames) {//提升
     }
 }
 function fillLogoAct(fileNames) {
-    $("#logoAdd").val(fileNames[0]);
+    if (fileNames[0].slice(-4)!=".png"){
+        alert("仅支持.png图片挂角。","提示");
+    }else{
+        $("#logoAdd").val(fileNames[0]);
+    }
 }
 function fillPreAct(fileNames) {
     $("#preAdd").val(fileNames[0]);
