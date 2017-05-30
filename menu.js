@@ -71,7 +71,7 @@ let mainMenu = Menu.buildFromTemplate(template);
 Menu.setApplicationMenu(mainMenu);
 
 //绑定全局泡泡
-let contextMenu = new Menu();
+var contextMenu = new Menu();
 contextMenu.append(new MenuItem({
     label: '添加', click: function () {
         $("#add").click();
@@ -84,13 +84,13 @@ contextMenu.append(new MenuItem({
     }
 }));
 window.addEventListener('contextmenu', function (e) {
-    console.log("Bind window popup menu.");
+    //console.log("Bind window popup menu.");
     e.preventDefault();//阻止默认动作
     contextMenu.popup(remote.getCurrentWindow(e.sender));
 }, false);
 
 //list泡泡
-let contextMenuList = new Menu();
+var contextMenuList = new Menu();
 contextMenuList.append(new MenuItem({
     label: '添加', click: function () {
         $("#add").click();
@@ -120,8 +120,8 @@ contextMenuList.append(new MenuItem({
 }));
 $(document).ready(function () {
         const listArea = document.getElementById('fileList');//放到ready中，或放在html最后，否则值为null
-        console.log("Bind fileList popup menu:");
-        console.log(listArea);
+        //console.log("Bind fileList popup menu:");
+        //console.log(listArea);
         listArea.addEventListener('contextmenu', function (e) {
             e.preventDefault();
             contextMenuList.popup(remote.getCurrentWindow(e.sender));
@@ -146,8 +146,8 @@ contextMenuOutput.append(new MenuItem({
 }));
 $(document).ready(function () {
         const outputArea = document.getElementById('outputAdd');
-        console.log("Bind popup menu:");
-        console.log(outputArea);
+        //console.log("Bind popup menu:");
+        //console.log(outputArea);
         outputArea.addEventListener('contextmenu', function (e) {
             e.preventDefault();
             contextMenuOutput.popup(remote.getCurrentWindow(e.sender));
@@ -170,8 +170,8 @@ contextMenuLogo.append(new MenuItem({
 }));
 $(document).ready(function () {
         const logoArea = document.getElementById('logoAdd');
-        console.log("Bind logo popup menu:");
-        console.log(logoArea);
+        //console.log("Bind logo popup menu:");
+        //console.log(logoArea);
         logoArea.addEventListener('contextmenu', function (e) {
             e.preventDefault();
             contextMenuLogo.popup(remote.getCurrentWindow(e.sender));
@@ -190,8 +190,8 @@ contextMenuPre.append(new MenuItem({
 }));
 $(document).ready(function () {
         const preArea = document.getElementById('preAdd');
-        console.log("Bind pre popup menu:");
-        console.log(preArea);
+        //console.log("Bind pre popup menu:");
+        //console.log(preArea);
         preArea.addEventListener('contextmenu', function (e) {
             e.preventDefault();
             contextMenuPre.popup(remote.getCurrentWindow(e.sender));
@@ -210,8 +210,8 @@ contextMenuPost.append(new MenuItem({
 }));
 $(document).ready(function () {
         const postArea = document.getElementById('postAdd');
-        console.log("Bind post popup menu:");
-        console.log(postArea);
+        //console.log("Bind post popup menu:");
+        //console.log(postArea);
         postArea.addEventListener('contextmenu', function (e) {
             e.preventDefault();
             contextMenuPost.popup(remote.getCurrentWindow(e.sender));

@@ -15,16 +15,30 @@ $().ready(function () {
     $("#run").click(function () {
         $("#codeList").attr("disabled", true);
         $("#run").attr("disabled", true);
-        $("#setting input").attr("disabled", true);
+        $("#setting input").attr("disabled", true);//不再冒泡泡菜单
         $("#setting button").attr("disabled", true);
 
-        const {Menu, MenuItem} = remote;
+        const {Menu} = remote;
         let mainMenu = Menu.getApplicationMenu();
         mainMenu.items[1].submenu.items[0].enabled =false;
         //console.log("Menu:");
         //console.log(mainMenu.items[1].submenu.items[0]);
+        contextMenu.items[2].enabled =false;
+        contextMenuList.items[6].enabled =false;
 
         checkRight(passRightCallEncoding);
+
+        //恢复菜单
+        /*$("#codeList").attr("disabled", false);
+        $("#run").attr("disabled", false);
+        $("#setting input").attr("disabled", false);
+        $("#setting button").attr("disabled", false);
+
+        const {Menu} = remote;
+        let mainMenu = Menu.getApplicationMenu();
+        mainMenu.items[1].submenu.items[0].enabled =true;
+        contextMenu.items[2].enabled =true;
+        contextMenuList.items[6].enabled =true;*/
     });
     /*$("#test").click(function () {
      alert("Warn: Exit now!");
