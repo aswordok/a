@@ -18,6 +18,12 @@ $().ready(function () {
         $("#setting input").attr("disabled", true);
         $("#setting button").attr("disabled", true);
 
+        const {Menu, MenuItem} = remote;
+        let mainMenu = Menu.getApplicationMenu();
+        mainMenu.items[1].submenu.items[0].enabled =false;
+        //console.log("Menu:");
+        //console.log(mainMenu.items[1].submenu.items[0]);
+
         checkRight(passRightCallEncoding);
     });
     /*$("#test").click(function () {
@@ -54,13 +60,18 @@ $().ready(function () {
     bindDrop(document.getElementById('postAdd'), fillPostAct);
     bindDrop(document.getElementById('outputAdd'), fillOutputAct);
 });
+
 document.ondragover = document.ondrop = (ev) => {
     ev.preventDefault() //阻止默认动作
 };
+
 let bindDrop = function (obj, callback) {
-    obj.ondrop = (ev) => {
+    obj.ondrop = (ev) => {//绑定drop事件
         ev.preventDefault();//阻止默认动作
         ev.stopPropagation();//阻止冒泡
+        if (obj.disabled==true){
+            return;
+        }
         let files = ev.dataTransfer.files;
         let fileNames = [];
         for (let i = 0; i < files.length; i++) {
@@ -68,6 +79,13 @@ let bindDrop = function (obj, callback) {
         }
         console.log(fileNames);
         callback(fileNames);
+    };
+};
+
+let unbindDrop = function (obj) {
+    obj.ondrop = (ev) => {//绑定drop事件
+        ev.preventDefault();//阻止默认动作
+        ev.stopPropagation();//阻止冒泡
     };
 };
 

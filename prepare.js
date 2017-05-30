@@ -137,12 +137,25 @@ let getMachineId = function () {
 };
 
 function checkRight(callback) {
+    let rotateVal=$("#rotation input:checked").val();
+    let args={
+        machineId: getMachineId(),
+        ver:"3.0",
+        code:$("#codeList").val(),
+        rotate:rotateVal==undefined?"":rotateVal,
+        logoAdd:$("#checkLogo").prop("checked")?$("#logoAdd").val().trim():"",
+        x:$("#x").val(),
+        y:$("#y").val(),
+        preAdd:$("#checkPre").prop("checked")?$("#preAdd").val().trim():"",
+        postAdd:$("#checkPost").prop("checked")?$("#postAdd").val().trim():""
+    };//key不需要引号，val需要引号
+    console.log(JSON.stringify(args));
     $.ajax({
         type: 'get',
         dataType: "json",//xml,html,script,json,jsonp,text
         encode: "utf-8",
         url: 'http://lightcloud.net.cn/streamer/access.js', // 需要提交的 url
-        data: {machineId: getMachineId(),ver:"3.0"},
+        data: args,
         success: function (data) {
             if (!window.console) {//如果console不存在，定义它的空函数
                 window.console = {

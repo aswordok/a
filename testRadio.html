@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery.min.js"></script>
+    <script>
+        $().ready(function () {
+            $("#btn").click(function () {
+                var selectVal=$("#wrap input:checked").val();
+                if (selectVal==undefined){
+                    alert("undefined");
+                }else{
+                    alert(selectVal);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="wrap">
+    <input type="radio" name="sex" value="male" />男
+    <input type="radio" name="sex" value="female" />女
+</div>
+<button id="btn" />click me
+</body>
+</html>
