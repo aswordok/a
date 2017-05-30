@@ -13,10 +13,10 @@ $().ready(function () {
         $("#fileList").empty();
     });
     $("#run").click(function () {
-        $("#codeList").attr("disabled", true);
-        $("#run").attr("disabled", true);
-        $("#setting input").attr("disabled", true);//不再冒泡泡菜单
-        $("#setting button").attr("disabled", true);
+        $("#codeList").prop("disabled", true);
+        $("#run").prop("disabled", true);
+        $("#setting input").prop("disabled", true);//不再冒泡泡菜单
+        $("#setting button").prop("disabled", true);
 
         const {Menu} = remote;
         let mainMenu = Menu.getApplicationMenu();
@@ -29,10 +29,10 @@ $().ready(function () {
         checkRight(passRightCallEncoding);
 
         //恢复菜单
-        /*$("#codeList").attr("disabled", false);
-        $("#run").attr("disabled", false);
-        $("#setting input").attr("disabled", false);
-        $("#setting button").attr("disabled", false);
+        /*$("#codeList").prop("disabled", false);
+        $("#run").prop("disabled", false);
+        $("#setting input").prop("disabled", false);
+        $("#setting button").prop("disabled", false);
 
         const {Menu} = remote;
         let mainMenu = Menu.getApplicationMenu();
