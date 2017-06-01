@@ -28,7 +28,7 @@ $().ready(function () {
             let i=data.pop().default;
             codeList=data;
             for (let i in data){
-                console.log(data[i]);
+                //console.log(data[i]);
                 $("#codeList").append("<option value=" + data[i].value + ">"+ data[i].text +"</option>");
             }
             $("#codeList").val(data[i].value);
@@ -143,7 +143,7 @@ function checkRight(callback) {
         ver:"3.0",
         code:$("#codeList").val(),
         rotate:rotateVal==undefined?"":rotateVal,
-        logoAdd:$("#checkLogo").prop("checked")&&$("#logoAdd").val().trim().length>0?true:false,
+        putLogo:$("#checkLogo").prop("checked")&&$("#logoAdd").val().trim().length>0?true:false,
         x:$("#x").val(),
         y:$("#y").val(),
     };//key不需要引号，val需要引号

@@ -38,6 +38,18 @@ let template = [{
         accelerator: 'CmdOrCtrl+C',
         click: function () {
             render.killSpawn();
+
+            //恢复菜单
+            $("#codeList").prop("disabled", false);
+             $("#run").prop("disabled", false);
+             $("#setting input").prop("disabled", false);
+             $("#setting button").prop("disabled", false);
+
+             const {Menu} = remote;
+             let mainMenu = Menu.getApplicationMenu();
+             mainMenu.items[1].submenu.items[0].enabled =true;
+             contextMenu.items[2].enabled =true;
+             contextMenuList.items[6].enabled =true;
         }
     }]
 }, {
