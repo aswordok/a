@@ -143,11 +143,9 @@ function checkRight(callback) {
         ver:"3.0",
         code:$("#codeList").val(),
         rotate:rotateVal==undefined?"":rotateVal,
-        logoAdd:$("#checkLogo").prop("checked")?$("#logoAdd").val().trim():"",
+        logoAdd:$("#checkLogo").prop("checked")&&$("#logoAdd").val().trim().length>0?true:false,
         x:$("#x").val(),
         y:$("#y").val(),
-        preAdd:$("#checkPre").prop("checked")?$("#preAdd").val().trim():"",
-        postAdd:$("#checkPost").prop("checked")?$("#postAdd").val().trim():""
     };//key不需要引号，val需要引号
     console.log(JSON.stringify(args));
     $.ajax({
