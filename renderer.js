@@ -7,7 +7,11 @@ console.log("Start render process");
 //f.exe  -i "d:/user/desktop/myVideo.ts" -vcodec libx264 -acodec mp2 -f mpegts "d:/user/desktop/myVideo_out.ts -y"
 //-y 输出覆盖
 let fProcess;
-function encoder() {
+function encoder(args) {
+    if($("#checkLogo").prop("checked")&&$("#logoAdd").val().trim().length>0){
+
+    }
+
     var fIn = "d:/user/desktop/myVideo.mp4";
     var fOut = "d:/user/desktop/myVideo_out.ts";
 

@@ -22,9 +22,8 @@ $().ready(function () {
                     }
                 };
             }
-            console.log("Show data of code list:");
-            console.log(JSON.stringify(data));
-            //document.write(JSON.stringify(data));
+            //console.log("Show data of code list:");
+            //console.log(JSON.stringify(data));
             let i=data.pop().default;
             codeList=data;
             for (let i in data){
@@ -210,11 +209,12 @@ function passRightCallEncoding(data) {
     console.log("Valid date:");
     console.log(myValidData.toLocaleDateString());
     console.log("Is date?");
-    console.log(myValidData instanceof Date);//判断是不是日期
+    console.log(myValidData instanceof Date);//true 判断是不是日期
     if (myValidData >= curDate || data[0]["trail"]) {
     }else{//过期且关闭试用
         alert("本机未授权！", "授权检查");
     }
+    //if (data[0]["alert"]==null){alert("null");}//true
     if (data[0]["alert"]!=null && data[0]["alert"].trim().length>0){
         alert(data[0]["alert"],"提示");
     }
@@ -290,7 +290,7 @@ let temp = app.getPath('temp');
 let f = "";
 let cp = function (fZip) {
     const extract = require('extract-zip')
-    console.log("Now extract f.zip:");
+    //console.log("Now extract f.zip:");
     extract(fZip, {dir: temp}, function (err) {
         f = path.join(temp, 'f.exe');
         tmpFiles.push(path.join(temp, 'f.exe'));
