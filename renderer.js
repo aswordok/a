@@ -30,7 +30,7 @@ function encoder() {
                         console.log(tmp + " has be deleted success.");
                     });
                     lastLogoAdd === logoAdd;
-                    cp();
+                    cp(logoAdd,logoTempAdd);
                 }
             } else {
                 tmpFiles.push(logoTempAdd);
