@@ -13,32 +13,8 @@ $().ready(function () {
         $("#fileList").empty();
     });
     $("#run").click(function () {
-        $("#codeList").prop("disabled", true);
-        $("#run").prop("disabled", true);
-        $("#setting input").prop("disabled", true);//不再冒泡泡菜单
-        $("#setting button").prop("disabled", true);
-
-        const {Menu} = remote;
-        let mainMenu = Menu.getApplicationMenu();
-        mainMenu.items[1].submenu.items[0].enabled =false;
-        //console.log("Menu:");
-        //console.log(mainMenu.items[1].submenu.items[0]);
-        contextMenu.items[2].enabled =false;
-        contextMenuList.items[6].enabled =false;
-
+        gray();
         checkRight(passRightCallEncoding);
-
-        //恢复菜单
-        /*$("#codeList").prop("disabled", false);
-        $("#run").prop("disabled", false);
-        $("#setting input").prop("disabled", false);
-        $("#setting button").prop("disabled", false);
-
-        const {Menu} = remote;
-        let mainMenu = Menu.getApplicationMenu();
-        mainMenu.items[1].submenu.items[0].enabled =true;
-        contextMenu.items[2].enabled =true;
-        contextMenuList.items[6].enabled =true;*/
     });
     /*$("#test").click(function () {
      alert("Warn: Exit now!");
@@ -65,6 +41,34 @@ $().ready(function () {
         fillOutput();
     });
 });
+
+function gray() {//菜单变灰
+    $("#codeList").prop("disabled", true);
+    $("#run").prop("disabled", true);
+    $("#setting input").prop("disabled", true);//不再冒泡泡菜单
+    $("#setting button").prop("disabled", true);
+
+    const {Menu} = remote;
+    let mainMenu = Menu.getApplicationMenu();
+    mainMenu.items[1].submenu.items[0].enabled =false;
+    //console.log("Menu:");
+    //console.log(mainMenu.items[1].submenu.items[0]);
+    contextMenu.items[2].enabled =false;
+    contextMenuList.items[6].enabled =false;
+}
+
+function degray() {//恢复菜单
+    $("#codeList").prop("disabled", false);
+    $("#run").prop("disabled", false);
+    $("#setting input").prop("disabled", false);
+    $("#setting button").prop("disabled", false);
+
+    const {Menu} = remote;
+    let mainMenu = Menu.getApplicationMenu();
+    mainMenu.items[1].submenu.items[0].enabled = true;
+    contextMenu.items[2].enabled = true;
+    contextMenuList.items[6].enabled = true;
+}
 
 //拖放文件
 $().ready(function () {
@@ -168,6 +172,7 @@ function fillLogoAct(fileNames) {
     }else{
         $("#logoAdd").val(fileNames[0]);
     }
+    $("#logoAdd").trigger("change");//主动触发事件
 }
 function fillPreAct(fileNames) {
     $("#preAdd").val(fileNames[0]);

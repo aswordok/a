@@ -40,16 +40,7 @@ let template = [{
             render.killSpawn();
 
             //恢复菜单
-            $("#codeList").prop("disabled", false);
-             $("#run").prop("disabled", false);
-             $("#setting input").prop("disabled", false);
-             $("#setting button").prop("disabled", false);
-
-             const {Menu} = remote;
-             let mainMenu = Menu.getApplicationMenu();
-             mainMenu.items[1].submenu.items[0].enabled =true;
-             contextMenu.items[2].enabled =true;
-             contextMenuList.items[6].enabled =true;
+            degray();
         }
     }]
 }, {
@@ -65,7 +56,7 @@ let template = [{
     }, {
         label: '软件注册',
         click: function () {
-            let machineId=getMachineId();
+            let machineId = getMachineId();
             const clipboard = require('electron').clipboard;
             clipboard.writeText(machineId);
             register(machineId);
@@ -77,6 +68,7 @@ let template = [{
         }
     }]
 }];
+
 const {remote} = require('electron');//{变量名}是ES6中新语法，叫解构
 const {Menu, MenuItem} = remote;
 let mainMenu = Menu.buildFromTemplate(template);
