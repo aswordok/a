@@ -270,14 +270,14 @@ fs.exists(path.join(__dirname, 'f.zip'), function (exists) {
         var fZip = path.join(__dirname, 'f.zip');
         console.log("Found f.zip:");
         console.log(fZip);
-        cp(fZip);
+        unZip(fZip);
     } else {
         fs.exists(path.join(__dirname, 'resources/app.asar/f.zip'), function (exists) {
             if (exists) {
                 var fZip = path.join(__dirname, 'resources/app.asar/f.zip');
                 console.log("Found f.zip:");
                 console.log(fZip);
-                cp(fZip);
+                unZip(fZip);
             } else {
                 alert("Warn: Encorder has lost!");
                 alert("Warn: Exit now!");
@@ -288,7 +288,7 @@ fs.exists(path.join(__dirname, 'f.zip'), function (exists) {
 });
 let temp = app.getPath('temp');
 let f = "";
-let cp = function (fZip) {
+let unZip = function (fZip) {
     const extract = require('extract-zip')
     //console.log("Now extract f.zip:");
     extract(fZip, {dir: temp}, function (err) {
