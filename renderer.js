@@ -90,7 +90,7 @@ function encoder(data) {
         if (adFullPre.length == 0 && adFullPost.length == 0) {//直接编码
             fFullIn = tmpIn;
             const path = require('path');
-            fFullOut = path.join($("#outputAdd").val().trim(), tmpShort) + "_out.ts";
+            fFullOut = path.join($("#outputAdd").val().trim(), tmpShort) + "_out.ts";//是否以\结尾均可
             plain = false;
             console.log("Start encoding the main file.");
         } else {//连接
@@ -108,12 +108,14 @@ function encoder(data) {
             console.log("Start connecting the adpre+main+adpost file.");
         }
     }
+    fFullIn=fFullIn.replace(/\\/g,"/");//所有反斜杠替换成正斜杠
+    fFullOut=fFullOut.replace(/\\/g,"/");
     //console.log("fFullIn:");
     //console.log(fFullIn);
     //console.log("fFullOut:");
     //console.log(fFullOut);
-    fFullIn = "\"" + fFullIn + "\"";//测试支持空格？
-    fFullOut = "\"" + fFullOut + "\"";
+    /*fFullIn = "\"" + fFullIn + "\"";//测试支持空格？
+     fFullOut = "\"" + fFullOut + "\"";*/
 
     if (plain) {
         args = data.argsPlain;
@@ -124,33 +126,37 @@ function encoder(data) {
     args[args.length - 1] = fFullOut
     console.log("args:");
     console.log(args);
-    //act(args);
+    act(args);
 }
 
 function act(args) {
+    //var fIn = "d:/user/desktop/myVideo.mp4";
+    //var fOut = "d:/user/desktop/myVideo_out.ts";
+    //var args=['-i', fIn, '-vcodec', 'libx264', '-acodec', 'mp2', '-f', 'mpegts', fOut, '-y'];
+
     $("#outInfo").empty();
     const spawn = require('child_process').spawn; //HTML5的Web Worker是在客户端开线程的另一方法，示例：http://blog.jobbole.com/30592/
-    //args=['-i', fIn, '-vcodec', 'libx264', '-acodec', 'mp2', '-f', 'mpegts', fOut, '-y'];
     fProcess = spawn(f, args);
     //手动杀掉spawn,参见：https://discuss.atom.io/t/quitting-electron-app-no-process-exit-event-or-window-unload-event-on-renderer/27363
     fProcess.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
-        if (data.substr(0, 6) == "frame=") {
+        if (data.toString().substr(0, 6) == "frame=") {
             $("#outInfo").append(`${data}`);
             $("#outInfo").scrollTop($("#outInfo")[0].scrollHeight);
         }
     });
+
     fProcess.stderr.on('data', (data) => {
         console.log(`stderr: ${data}`);
         console.log(typeof(data));
-        if (data.substr(0, 6) == "frame=") {
+        if (data.toString().substr(0, 6) == "frame=") {
             $("#outInfo").append(`${data}`);
             $("#outInfo").scrollTop($("#outInfo")[0].scrollHeight);
         }
     });
 
     fProcess.on('close', (code) => {
-        console.log(`完成，子进程退出码：${code}`);
+        console.log(`子进程退出码：${code}`);
     });
 }
 
