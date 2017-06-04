@@ -83,15 +83,22 @@ function encoder(data) {
         //需要清理mainFullPre---------------------------
         console.log("Do main pretreatment.")
     }else{//直接编码或连接
-        if (adFullPre.length==0 && adFullPost.length==0){
-            fFullIn = $("#fileList option:first").val();
-            $("#fileList option:first").remove();
-            let fShortOut = fFullIn.substring(fFullIn.lastIndexOf("\\")+1,fFullIn.lastIndexOf("."));
+        let tmpIn=$("#fileList option:first").val();
+        $("#fileList option:first").remove();
+        let tmpShort=tmpIn.substring(tmpIn.lastIndexOf("\\")+1,tmpIn.lastIndexOf("."));
+        if (adFullPre.length==0 && adFullPost.length==0){//直接编码
+            fFullIn = tmpIn;
             const path = require('path');
-            fFullOut = path.join($("#outputAdd").val().trim(), fShortOut)+"_out.ts";
+            fFullOut = path.join($("#outputAdd").val().trim(), tmpShort)+"_out.ts";
             plain=false;
             console.log("Start encoding the main file.")
         }else{//连接
+            if (adFullPre.length>0){
+                fFullOut = "concat:" + adFullPre + "|";
+            }else{
+                fFullOut = "concat:";
+            }
+            fFullOut+=
 
         }
     }
