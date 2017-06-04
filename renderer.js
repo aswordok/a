@@ -52,7 +52,13 @@ function encoder(data) {
         mainFullIn = $("#fileList option:first").val();
         let mainShortIn = mainFullIn.substring(mainFullIn.lastIndexOf("\\") + 1, mainFullIn.lastIndexOf("."));
         let mainPathIn = mainFullIn.substr(0, mainFullIn.lastIndexOf("\\") + 1);//含最后一个\
-        mainFullPre = mainPathIn + mainShortIn + "_pre.ts"
+        let tmpPathOutput=$("#outputAdd").val().trim();
+        if ($("#checkOutput").prop("checked")){
+            mainFullPre = mainPathIn + mainShortIn + "_pre.ts"
+        }else{
+            const path = require('path');
+            mainFullPre = path.join(tmpPathOutput, mainShortIn) + "_pre.ts";
+        }
         //console.log("mainFullPre");
         //console.log(mainFullPre);
     } else {
@@ -86,6 +92,11 @@ function encoder(data) {
         let tmpIn = $("#fileList option:first").val();
         $("#fileList option:first").remove();
         let tmpShort = tmpIn.substring(tmpIn.lastIndexOf("\\") + 1, tmpIn.lastIndexOf("."));
+        if ($("#checkOutput").prop("checked")){
+
+        }else{
+
+        }
         let tmpPathIn = tmpIn.substr(0, tmpIn.lastIndexOf("\\") + 1);//含最后一个\
         if (adFullPre.length == 0 && adFullPost.length == 0) {//直接编码
             fFullIn = tmpIn;
@@ -122,11 +133,11 @@ function encoder(data) {
     } else {
         args = data.argsMain;
     }
-    args[0] = fFullIn;
+    args[1] = fFullIn;
     args[args.length - 1] = fFullOut
     console.log("args:");
     console.log(args);
-    act(args);
+    //act(args);
 }
 
 function act(args) {
