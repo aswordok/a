@@ -140,6 +140,7 @@ function act(args) {
     //手动杀掉spawn,参见：https://discuss.atom.io/t/quitting-electron-app-no-process-exit-event-or-window-unload-event-on-renderer/27363
     fProcess.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
+        console.log(typeof(data));
         if (data.toString().substr(0, 6) == "frame=") {
             $("#outInfo").append(`${data}`);
             $("#outInfo").scrollTop($("#outInfo")[0].scrollHeight);
