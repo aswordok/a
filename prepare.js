@@ -98,7 +98,7 @@ function cp(source, target) {
             const FileSystem = require('fs');
             const rd = FileSystem.createReadStream(from);
             rd.on('error', err => reject(err));
-            const wr = FileSystem.createWriteStream(to);
+            const wr = FileSystem.createWriteStream(to);//已经存在则覆盖
             wr.on('error', err => reject(err));
             wr.on('close', () => resolve("Copy logo.png success."));
             rd.pipe(wr);

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>testPath</title>
+</head>
+<script src="jquery.min.js"></script>
+<script>
+    var fileFull="D:\\abc 12\\yy.88\\abc def.ghi.mpg";
+    var filePost=fileFull.substr(fileFull.lastIndexOf("."));//含.
+    var fileName=fileFull.substr(fileFull.lastIndexOf("\\")+1);
+    var filePath=fileFull.substr(0,fileFull.lastIndexOf("\\")+1);//含最后一个\
+    var fileShort=fileFull.substring(fileFull.lastIndexOf("\\")+1,fileFull.lastIndexOf("."));
+    document.write(filePost);
+    document.write("<br />");
+    document.write(fileName);
+    document.write("<br />");
+    document.write(filePath);
+    document.write("<br />");
+    document.write(fileShort);
+    document.write("<br />");
+</script>
+<body>
+
+</body>
+</html>

@@ -14,24 +14,89 @@ function encoder(data) {
         return;
     }
 
-
-
+    let adFullPre="";
+    let adFullPreIn="";
     if ($("#checkPre").prop("checked") && $("#preAdd").val().trim().length > 0) {
-        let adShorPre=$("#preAdd").val().trim().replace(/^.+?\\([^\\]+?)(\.[^\.\\]*?)?$/gi, "$1");
+        adFullPreIn=$("#preAdd").val().trim();
+        let adShorPre=adFullPreIn.substring(adFullPreIn.lastIndexOf("\\")+1,adFullPreIn.lastIndexOf("."));//文件名不带后缀
         const {app} = require('electron').remote;
         let temp = app.getPath('temp');
         const path = require('path');
-        let adFullPre = path.join(temp, adShorPre)+".ts";
+        adFullPre = path.join(temp, adShorPre)+".ts";
         console.log("adFullPre:")
         console.log(adFullPre);
-
+    }else{
+        let adFullPre="";
+        let adFullPreIn="";
     }
 
+    let adFullPost="";
+    let adFullPostIn="";
     if ($("#checkPost").prop("checked") && $("#postAdd").val().trim().length > 0) {
-
+        adFullPostIn=$("#postAdd").val().trim();
+        let adShorPost=adFullPostIn.substring(adFullPostIn.lastIndexOf("\\")+1,adFullPostIn.lastIndexOf("."));
+        const {app} = require('electron').remote;
+        let temp = app.getPath('temp');
+        const path = require('path');
+        adFullPost = path.join(temp, adShorPost)+".ts";
+        console.log("adFullPost:")
+        console.log(adFullPost);
+    }else{
+        let adFullPost="";
+        let adFullPostIn="";
     }
 
-    let fFullIn = $("#fileList option:first").val();
+    let mainFullPre="";
+    let mainFullIn="";
+    if (adFullPre.length>0 || adFullPost.length>0){
+        mainFullIn = $("#fileList option:first").val();
+        let mainShortIn = mainFullIn.substring(mainFullIn.lastIndexOf("\\")+1,mainFullIn.lastIndexOf("."));
+        let mainPathIn=mainFullIn.substr(0,mainFullIn.lastIndexOf("\\")+1);//含最后一个\
+        mainFullPre=mainPathIn+mainShortIn+"_pre.ts"
+        console.log("mainFullPre");
+        console.log(mainFullPre);
+    }else{
+        mainFullPre="";
+        mainFullIn="";
+    }
+
+    let fFullIn="";
+    let fFullOut="";
+    let plain=true;
+    const fs = require('fs');
+    if (adFullPre.length>0 && !fs.existsSync(adFullPre)){//do pre
+        fFullIn=adFullPreIn;
+        fFullOut=adFullPre;
+        plain=true;
+        tmpFiles.push(adFullPre);
+        console.log("Do adpre pretreatment.")
+    }else if (adFullPost.length>0 && !fs.existsSync(adFullPost)){//do post
+        fFullIn=adFullPostIn;
+        fFullOut=adFullPost;
+        plain=true;
+        tmpFiles.push(adFullPost);
+        console.log("Do adpre pretreatment.")
+    }else if (mainFullPre.length>0 && !fs.existsSync(mainFullPre)){//do main pre
+        fFullIn=mainFullIn;
+        fFullOut=mainFullPre;
+        plain=false;
+        //需要清理mainFullPre---------------------------
+        console.log("Do main pretreatment.")
+    }else{//直接编码或连接
+        if (adFullPre.length==0 && adFullPost.length==0){
+            fFullIn = $("#fileList option:first").val();
+            $("#fileList option:first").remove();
+            let fShortOut = fFullIn.substring(fFullIn.lastIndexOf("\\")+1,fFullIn.lastIndexOf("."));
+            const path = require('path');
+            fFullOut = path.join($("#outputAdd").val().trim(), fShortOut)+"_out.ts";
+            plain=false;
+            console.log("Start encoding the main file.")
+        }else{//连接
+
+        }
+    }
+
+    /*let fFullIn = $("#fileList option:first").val();
     console.log("fFullIn:")
     console.log(fFullIn);
     $("#fileList option:first").remove();
@@ -40,7 +105,11 @@ function encoder(data) {
     const path = require('path');
     fFullOut = path.join($("#outputAdd").val().trim(), fShortOut)+"_out.ts";
     console.log("fFullOut:")
-    console.log(fFullOut);
+    console.log(fFullOut);*/
+
+}
+
+function act() {
     /*
      var fIn = "d:/user/desktop/myVideo.mp4";
      var fOut = "d:/user/desktop/myVideo_out.ts";
@@ -71,6 +140,7 @@ function encoder(data) {
      });
      */
 }
+
 exports.encoding = encoder;
 exports.killSpawn = () => {
     if (fProcess) {
