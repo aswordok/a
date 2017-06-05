@@ -7,7 +7,14 @@ console.log("Start render process");
 //f.exe  -i "d:/user/desktop/myVideo.ts" -vcodec libx264 -acodec mp2 -f mpegts "d:/user/desktop/myVideo_out.ts -y"
 //-y 输出覆盖
 let fProcess;
+let myData;
+let delFile={
+    file:"",
+    del:false
+};
 function encoder(data) {
+    myData=data;
+    delFile.del=false;
     if ($("#fileList option").length == 0 || $("#fileList option:first").val() == "dnd") {
         console.log("No item to encode.");
         degray();
@@ -87,6 +94,7 @@ function encoder(data) {
         fFullOut = mainFullPre;
         plain = false;
         //需要清理mainFullPre---------------------------
+        delFile.file=mainFullPre;
         console.log("Prepare for main.")
     } else {//直接编码或连接
         let tmpIn = $("#fileList option:first").val();
@@ -120,6 +128,7 @@ function encoder(data) {
             }
             fFullOut = tmpPathIn + tmpShort + "_out.ts";
             plain = true;
+            delFile.del=true;
             console.log("Start connecting the adpre+main+adpost file.");
         }
     }
@@ -129,19 +138,17 @@ function encoder(data) {
     //console.log(fFullIn);
     //console.log("fFullOut:");
     //console.log(fFullOut);
-    /*fFullIn = "\"" + fFullIn + "\"";//测试支持空格？
-     fFullOut = "\"" + fFullOut + "\"";*/
 
     if (plain) {
         args = data.argsPlain;
     } else {
         args = data.argsMain;
     }
-    args[1] = fFullIn;
-    args[args.length - 1] = fFullOut
+    args[1] = fFullIn;//支持文件名及路径空格
+    args[args.length - 1] = fFullOut;//支持文件名及路径空格
     console.log("args:");
     console.log(args);
-    //act(args);
+    act(args);
 }
 
 function act(args) {
@@ -151,7 +158,9 @@ function act(args) {
 
     $("#outInfo").empty();
     const spawn = require('child_process').spawn; //HTML5的Web Worker是在客户端开线程的另一方法，示例：http://blog.jobbole.com/30592/
-    fProcess = spawn(f, args);
+    const {app} = require('electron').remote;
+    let temp = app.getPath('temp');
+    fProcess = spawn(f, args,{cwd:temp});
     //手动杀掉spawn,参见：https://discuss.atom.io/t/quitting-electron-app-no-process-exit-event-or-window-unload-event-on-renderer/27363
     fProcess.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
@@ -173,7 +182,25 @@ function act(args) {
 
     fProcess.on('close', (code) => {
         console.log(`子进程退出码：${code}`);
+
+        if (delFile.del){
+            const fs = require('fs');
+            fs.exists(delFile.file, function (exists) {
+                if (exists) {
+                    fs.unlink(delFile.file, (err) => {
+                        if (err) {
+                            console.log("An error ocurred while delete the file " + delFile.file);
+                            console.log(err);
+                        }else {
+                            console.log(delFile.file + " has be deleted successfully.");
+                        }
+                    });
+                }
+            });
+        }
     });
+
+    encoder(myData);
 }
 
 exports.encoding = encoder;

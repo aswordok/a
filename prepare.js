@@ -86,7 +86,7 @@ function cpLogo() {
         const {app} = require('electron').remote;
         let temp = app.getPath('temp');
         const path = require('path');
-        let logoTempAdd = path.join(temp, 'logo.png');
+        let logoTempAdd = path.join(temp, 'myLogo.png');
         let logoAdd = $("#logoAdd").val().trim();
         cp(logoAdd, logoTempAdd);
     }
@@ -290,7 +290,7 @@ window.onbeforeunload = function (e) {
     const {app} = require('electron').remote;
     let temp = app.getPath('temp');
     const path = require('path');
-    let logoTempAdd = path.join(temp, 'logo.png');
+    let logoTempAdd = path.join(temp, 'myLogo.png');
     const fs = require('fs');
     fs.exists(logoTempAdd, function (exists) {
         if (exists) {
@@ -351,7 +351,7 @@ fs.exists(path.join(__dirname, 'f.zip'), function (exists) {
     }
 });
 let temp = app.getPath('temp');
-let f = "";
+var f = "";
 let unZip = function (fZip) {
     const extract = require('extract-zip')
     //console.log("Now extract f.zip:");
