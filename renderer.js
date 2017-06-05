@@ -52,10 +52,10 @@ function encoder(data) {
         mainFullIn = $("#fileList option:first").val();
         let mainShortIn = mainFullIn.substring(mainFullIn.lastIndexOf("\\") + 1, mainFullIn.lastIndexOf("."));
         let mainPathIn = mainFullIn.substr(0, mainFullIn.lastIndexOf("\\") + 1);//含最后一个\
-        let tmpPathOutput=$("#outputAdd").val().trim();
-        if ($("#checkOutput").prop("checked")){
+        let tmpPathOutput = $("#outputAdd").val().trim();
+        if ($("#checkOutput").prop("checked")) {
             mainFullPre = mainPathIn + mainShortIn + "_pre.ts"
-        }else{
+        } else {
             const path = require('path');
             mainFullPre = path.join(tmpPathOutput, mainShortIn) + "_pre.ts";
         }
@@ -92,16 +92,15 @@ function encoder(data) {
         let tmpIn = $("#fileList option:first").val();
         $("#fileList option:first").remove();
         let tmpShort = tmpIn.substring(tmpIn.lastIndexOf("\\") + 1, tmpIn.lastIndexOf("."));
-        if ($("#checkOutput").prop("checked")){
-
-        }else{
-
-        }
         let tmpPathIn = tmpIn.substr(0, tmpIn.lastIndexOf("\\") + 1);//含最后一个\
         if (adFullPre.length == 0 && adFullPost.length == 0) {//直接编码
             fFullIn = tmpIn;
             const path = require('path');
-            fFullOut = path.join($("#outputAdd").val().trim(), tmpShort) + "_out.ts";//是否以\结尾均可
+            if ($("#checkOutput").prop("checked")) {
+                fFullOut = tmpPathIn + tmpShort + "_out.ts";
+            } else {
+                fFullOut = path.join($("#outputAdd").val().trim(), tmpShort) + "_out.ts";//是否以\结尾均可
+            }
             plain = false;
             console.log("Start encoding the main file.");
         } else {//连接
@@ -114,13 +113,18 @@ function encoder(data) {
             if (adFullPost.length > 0) {
                 fFullIn += "|" + adFullPost;
             }
+            if ($("#checkOutput").prop("checked")) {
+                fFullOut = tmpPathIn + tmpShort + "_out.ts";
+            } else {
+                fFullOut = path.join($("#outputAdd").val().trim(), tmpShort) + "_out.ts";//是否以\结尾均可
+            }
             fFullOut = tmpPathIn + tmpShort + "_out.ts";
             plain = true;
             console.log("Start connecting the adpre+main+adpost file.");
         }
     }
-    fFullIn=fFullIn.replace(/\\/g,"/");//所有反斜杠替换成正斜杠
-    fFullOut=fFullOut.replace(/\\/g,"/");
+    fFullIn = fFullIn.replace(/\\/g, "/");//所有反斜杠替换成正斜杠
+    fFullOut = fFullOut.replace(/\\/g, "/");
     //console.log("fFullIn:");
     //console.log(fFullIn);
     //console.log("fFullOut:");
