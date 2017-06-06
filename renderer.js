@@ -165,9 +165,10 @@ function encoder(data) {
     }
 
     //处理进度条
-    let nowDoWithArr=fFullIn.split("|");
     $("#progressRight").html("Uncomplete");
     $("#progressWalk").prop("width","0.1%");
+    $("#progressMiddle").html("0%");
+    let nowDoWithArr=fFullIn.split("|");
     if (nowDoWithArr.length==1){
         let nowDoWith=fFullIn.substr(fFullIn.lastIndexOf("\\")+1);//取文件名
         $("#progressLeft").html("Encoding:"+nowDoWith);
@@ -179,6 +180,7 @@ function encoder(data) {
             if (nowDoWith.indexOf(temp)==-1){
                 nowDoWith=nowDoWith.substr(nowDoWith.lastIndexOf("\\")+1);//取文件名
                 $("#progressLeft").html("Encoding:"+nowDoWith);
+                break;
             }
         }
     }
@@ -209,7 +211,6 @@ function act(args) {
     $("#outInfo").append("Author:一剑\n");
     $("#outInfo").append("E-mail:234107@qq.com\n");
     $("#outInfo").append("官方网站：http://www.lightcloud.net.cn\n");
-    $("#progressMiddle").html("0%");
 
     const spawn = require('child_process').spawn; //HTML5的Web Worker是在客户端开线程的另一方法，示例：http://blog.jobbole.com/30592/
     const {app} = require('electron').remote;
