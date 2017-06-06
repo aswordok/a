@@ -205,7 +205,12 @@ function act(args) {
     fProcess.stderr.on('data', (data) => {
         console.log(`stderr: ${data}`);
         console.log(typeof(data));
-        if (data.toString().substr(0, 6) == "frame=") {
+        let s=data.toString().trim();
+        if (s.indexOf("Duration:")>0){
+            let t=s.substr(s.indexOf("Duration:")+10,11);
+            alert("|"+t+"|");
+        }
+        if (s.substr(0, 6) == "frame=") {
             $("#outInfo").append(`${data}`);
             $("#outInfo").scrollTop($("#outInfo")[0].scrollHeight);
         }
