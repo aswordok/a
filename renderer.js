@@ -9,7 +9,7 @@ console.log("Start render process");
 let fProcess;
 let myData;
 let delFile={
-    file:"",
+    file:[],
     del:false
 };
 function encoder(data) {
@@ -81,20 +81,20 @@ function encoder(data) {
         fFullIn = adFullPreIn;
         fFullOut = adFullPre;
         plain = true;
-        tmpFiles.push(adFullPre);
+        delFile.file.push(adFullPre);
         console.log("Prepare for adpre.")
     } else if (adFullPost.length > 0 && !fs.existsSync(adFullPost)) {//do post
         fFullIn = adFullPostIn;
         fFullOut = adFullPost;
         plain = true;
-        tmpFiles.push(adFullPost);
+        delFile.file.push(adFullPost);
         console.log("Prepare for adpost.")
     } else if (mainFullPre.length > 0 && !fs.existsSync(mainFullPre)) {//do main pre
         fFullIn = mainFullIn;
         fFullOut = mainFullPre;
         plain = false;
         //需要清理mainFullPre---------------------------
-        delFile.file=mainFullPre;
+        delFile.file.push(mainFullPre);
         console.log("Prepare for main.")
     } else {//直接编码或连接
         let tmpIn = $("#fileList option:first").val();
@@ -185,22 +185,25 @@ function act(args) {
 
         if (delFile.del){
             const fs = require('fs');
-            fs.exists(delFile.file, function (exists) {
-                if (exists) {
-                    fs.unlink(delFile.file, (err) => {
+            while (delFile.file.length > 0) {
+                let tmp = delFile.file.pop();
+                if (fs.existsSync(tmp)) {
+                    fs.unlink(tmp, (err) => {
                         if (err) {
-                            console.log("An error ocurred while delete the file " + delFile.file);
+                            console.log("An error ocurred while delete the file " + tmp);
                             console.log(err);
-                        }else {
-                            console.log(delFile.file + " has be deleted successfully.");
+                            return;
                         }
+                        console.log(tmp + " has be deleted successfully.");
                     });
+                } else {
+                    console.log("This file doesn't exist, cannot delete");
                 }
-            });
+            }
         }
-    });
 
-    encoder(myData);
+        encoder(myData);
+    });
 }
 
 exports.encoding = encoder;
