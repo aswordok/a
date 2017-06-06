@@ -290,16 +290,16 @@ window.onbeforeunload = function (e) {
     const {app} = require('electron').remote;
     let temp = app.getPath('temp');
     const path = require('path');
-    let logoTempAdd = path.join(temp, 'myLogo.png');
+    let tmp = path.join(temp, 'myLogo.png');
     const fs = require('fs');
-    fs.exists(logoTempAdd, function (exists) {
+    fs.exists(tmp, function (exists) {
         if (exists) {
-            fs.unlink(logoTempAdd, (err) => {
+            fs.unlink(tmp, (err) => {
                 if (err) {
-                    console.log("An error ocurred while delete the file " + logoTempAdd);
+                    console.log("An error ocurred while delete the file " + tmp);
                     console.log(err);
                 }else {
-                    console.log(logoTempAdd + " has be deleted successfully.");
+                    console.log(tmp + " has be deleted successfully.");
                 }
             });
         }

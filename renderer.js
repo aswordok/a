@@ -9,14 +9,31 @@ console.log("Start render process");
 let fProcess;
 let myData;
 let delFile={
-    file:[],
-    del:false
+    delMainFile:false,
+    mainFile:"",
+    adFile:[]
 };
 function encoder(data) {
     myData=data;
-    delFile.del=false;
+    delFile.delMainFile=false;
     if ($("#fileList option").length == 0 || $("#fileList option:first").val() == "dnd") {
         console.log("No item to encode.");
+        const fs = require('fs');
+        while (delFile.adFile.length > 0) {
+            let tmp = delFile.adFile.pop();
+            if (fs.existsSync(tmp)) {
+                fs.unlink(tmp, (err) => {
+                    if (err) {
+                        console.log("An error ocurred while delete the file " + tmp);
+                        console.log(err);
+                        return;
+                    }
+                    console.log(tmp + " has be deleted successfully.");
+                });
+            } else {
+                console.log("This file doesn't exist, cannot delete");
+            }
+        }
         degray();
         return;
     }
@@ -81,20 +98,20 @@ function encoder(data) {
         fFullIn = adFullPreIn;
         fFullOut = adFullPre;
         plain = true;
-        delFile.file.push(adFullPre);
+        delFile.adFile.push(adFullPre);
         console.log("Prepare for adpre.")
     } else if (adFullPost.length > 0 && !fs.existsSync(adFullPost)) {//do post
         fFullIn = adFullPostIn;
         fFullOut = adFullPost;
         plain = true;
-        delFile.file.push(adFullPost);
+        delFile.adFile.push(adFullPost);
         console.log("Prepare for adpost.")
     } else if (mainFullPre.length > 0 && !fs.existsSync(mainFullPre)) {//do main pre
         fFullIn = mainFullIn;
         fFullOut = mainFullPre;
         plain = false;
         //需要清理mainFullPre---------------------------
-        delFile.file.push(mainFullPre);
+        delFile.mainFile=mainFullPre;
         console.log("Prepare for main.")
     } else {//直接编码或连接
         let tmpIn = $("#fileList option:first").val();
@@ -128,17 +145,31 @@ function encoder(data) {
             }
             fFullOut = tmpPathIn + tmpShort + "_out.ts";
             plain = true;
-            delFile.del=true;
+            delFile.delMainFile=true;
             console.log("Start connecting the adpre+main+adpost file.");
         }
     }
+
+    //处理进度条
+    let nowDoWithArr=fFullIn.split("|");
+    $("#progressRight").html("Uncompleted");
+    if (nowDoWithArr.length==1){
+        let nowDoWith=fFullIn.substr(fFullIn.lastIndexOf("\\")+1);//取文件名
+        $("#progressLeft").html("Encoding:"+nowDoWith);
+    }else{
+        while (nowDoWithArr.length>0){
+            let nowDoWith=nowDoWithArr.pop();
+            const {app} = require('electron').remote;
+            let temp = app.getPath('temp');
+            if (nowDoWith.indexOf(temp)==-1){
+                nowDoWith=nowDoWith.substr(nowDoWith.lastIndexOf("\\")+1);//取文件名
+                $("#progressLeft").html("Encoding:"+nowDoWith);
+            }
+        }
+    }
+
     fFullIn = fFullIn.replace(/\\/g, "/");//所有反斜杠替换成正斜杠
     fFullOut = fFullOut.replace(/\\/g, "/");
-    //console.log("fFullIn:");
-    //console.log(fFullIn);
-    //console.log("fFullOut:");
-    //console.log(fFullOut);
-
     if (plain) {
         args = data.argsPlain;
     } else {
@@ -183,23 +214,24 @@ function act(args) {
     fProcess.on('close', (code) => {
         console.log(`子进程退出码：${code}`);
 
-        if (delFile.del){
+        $("#progressRight").html("Completed");
+
+        if (delFile.delMainFile){
             const fs = require('fs');
-            while (delFile.file.length > 0) {
-                let tmp = delFile.file.pop();
-                if (fs.existsSync(tmp)) {
+            let tmp=delFile.mainFile;
+            delFile.mainFile="";
+            fs.exists(tmp, function (exists) {
+                if (exists) {
                     fs.unlink(tmp, (err) => {
                         if (err) {
                             console.log("An error ocurred while delete the file " + tmp);
                             console.log(err);
-                            return;
+                        }else {
+                            console.log(tmp + " has be deleted successfully.");
                         }
-                        console.log(tmp + " has be deleted successfully.");
                     });
-                } else {
-                    console.log("This file doesn't exist, cannot delete");
                 }
-            }
+            });
         }
 
         encoder(myData);
