@@ -13,11 +13,21 @@ let delFile={
     mainFile:"",
     adFile:[]
 };
+let iDur={//second
+    process:0,//0.no ad、1adPre、2.main、3.adPost、4.connect
+    adPre:0,
+    adPost:0,
+    main:0
+};
 function encoder(data) {
     myData=data;
     delFile.delMainFile=false;
     if ($("#fileList option").length == 0 || $("#fileList option:first").val() == "dnd") {
         console.log("No item to encode.");
+        iDur.process=0;
+        iDur.adPre=0;
+        iDur.adPost=0;
+        iDur.main=0;
         const fs = require('fs');
         while (delFile.adFile.length > 0) {
             let tmp = delFile.adFile.pop();
@@ -99,12 +109,14 @@ function encoder(data) {
         fFullOut = adFullPre;
         plain = true;
         delFile.adFile.push(adFullPre);
+        iDur.process=1;
         console.log("Prepare for adpre.")
     } else if (adFullPost.length > 0 && !fs.existsSync(adFullPost)) {//do post
         fFullIn = adFullPostIn;
         fFullOut = adFullPost;
         plain = true;
         delFile.adFile.push(adFullPost);
+        iDur.process=3;
         console.log("Prepare for adpost.")
     } else if (mainFullPre.length > 0 && !fs.existsSync(mainFullPre)) {//do main pre
         fFullIn = mainFullIn;
@@ -112,6 +124,7 @@ function encoder(data) {
         plain = false;
         //需要清理mainFullPre---------------------------
         delFile.mainFile=mainFullPre;
+        iDur.process=2;
         console.log("Prepare for main.")
     } else {//直接编码或连接
         let tmpIn = $("#fileList option:first").val();
@@ -127,6 +140,7 @@ function encoder(data) {
                 fFullOut = path.join($("#outputAdd").val().trim(), tmpShort) + "_out.ts";//是否以\结尾均可
             }
             plain = false;
+            iDur.process=0;
             console.log("Start encoding the main file.");
         } else {//连接
             if (adFullPre.length > 0) {
@@ -143,16 +157,17 @@ function encoder(data) {
             } else {
                 fFullOut = path.join($("#outputAdd").val().trim(), tmpShort) + "_out.ts";//是否以\结尾均可
             }
-            fFullOut = tmpPathIn + tmpShort + "_out.ts";
             plain = true;
             delFile.delMainFile=true;
+            iDur.process=4;
             console.log("Start connecting the adpre+main+adpost file.");
         }
     }
 
     //处理进度条
     let nowDoWithArr=fFullIn.split("|");
-    $("#progressRight").html("Uncompleted");
+    $("#progressRight").html("Uncomplete");
+    $("#progressWalk").prop("width","0.1%");
     if (nowDoWithArr.length==1){
         let nowDoWith=fFullIn.substr(fFullIn.lastIndexOf("\\")+1);//取文件名
         $("#progressLeft").html("Encoding:"+nowDoWith);
@@ -188,38 +203,68 @@ function act(args) {
     //var args=['-i', fIn, '-vcodec', 'libx264', '-acodec', 'mp2', '-f', 'mpegts', fOut, '-y'];
 
     $("#outInfo").empty();
+    $("#outInfo").append("免责声明：\n");
+    $("#outInfo").append("    本程序仅供测试研究用，并且作者不承担使用软件造成任何直接或者间接损失。\n");
+    $("#outInfo").append("    包括但不限于H.265、H.264、mpeg2、AC3、mp2等音视频编码器、mpeg-TS封装格式的使用皆需授权费，请自行负责。\n");
+    $("#outInfo").append("Author:一剑\n");
+    $("#outInfo").append("E-mail:234107@qq.com\n");
+    $("#outInfo").append("官方网站：http://www.lightcloud.net.cn\n");
+    $("#progressMiddle").html("0%");
+
     const spawn = require('child_process').spawn; //HTML5的Web Worker是在客户端开线程的另一方法，示例：http://blog.jobbole.com/30592/
     const {app} = require('electron').remote;
     let temp = app.getPath('temp');
+    let iCur=0;
     fProcess = spawn(f, args,{cwd:temp});
-    //手动杀掉spawn,参见：https://discuss.atom.io/t/quitting-electron-app-no-process-exit-event-or-window-unload-event-on-renderer/27363
     fProcess.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
         console.log(typeof(data));
-        if (data.toString().substr(0, 6) == "frame=") {
-            $("#outInfo").append(`${data}`);
-            $("#outInfo").scrollTop($("#outInfo")[0].scrollHeight);
-        }
+        $("#outInfo").append(`${data}`);
+        $("#outInfo").scrollTop($("#outInfo")[0].scrollHeight);
     });
 
     fProcess.stderr.on('data', (data) => {
+        //所有输出信息,都为错误输出流,用StandardOutput是捕获不到任何消息的
         console.log(`stderr: ${data}`);
         console.log(typeof(data));
-        let s=data.toString().trim();
+        let s=data.toString();
         if (s.indexOf("Duration:")>0){
             let t=s.substr(s.indexOf("Duration:")+10,11);
-            alert("|"+t+"|");
+            let a=t.split(":");
+            iCur=parseInt(a[0])*3600+parseInt(a[1])*60+parseInt(a[2]);
+            if (iDur.process==4){
+                iCur=iDur.adPre+iDur.main+iDur.adPost;
+            }else if(iDur.process==1){
+                iDur.adPre=iCur;
+            }else if(iDur.process==2){
+                iDur.main=iCur;
+            }else if(iDur.process==3){
+                iDur.adPost=iCur;
+            }
+            console.log("Total time:"+t+"="+iCur+"s.");
         }
         if (s.substr(0, 6) == "frame=") {
             $("#outInfo").append(`${data}`);
             $("#outInfo").scrollTop($("#outInfo")[0].scrollHeight);
+
+            let t=s.substr(s.indexOf("time=")+5,11);
+            if (t.substr(0,1)!="-"){//有时时间为负的异常
+                let a=t.split(":");
+                let j=parseInt(a[0])*3600+parseInt(a[1])*60+parseInt(a[2]);
+                let p=Math.round(j/iCur*100);
+                console.log("Current time:"+t+"="+j+"s,percent:"+p+"%");
+                $("#progressMiddle").html(p+"%");
+                $("#progressWalk").width(p+"%");
+            }
         }
     });
 
     fProcess.on('close', (code) => {
         console.log(`子进程退出码：${code}`);
 
-        $("#progressRight").html("Completed");
+        $("#progressMiddle").html("100%");
+        $("#progressRight").html("Complete");
+        $("#progressWalk").prop("width","100%");
 
         if (delFile.delMainFile){
             const fs = require('fs');
@@ -245,6 +290,7 @@ function act(args) {
 
 exports.encoding = encoder;
 
+//手动杀掉spawn,参见：https://discuss.atom.io/t/quitting-electron-app-no-process-exit-event-or-window-unload-event-on-renderer/27363
 exports.killSpawn = () => {
     if (fProcess) {
         console.log('killing encoder ...');

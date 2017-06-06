@@ -5,8 +5,14 @@
     <title>Title</title>
     <script>
         var s="abcdefg";
-        var i=s.indexOf("a11bc");
-        alert(i);
+        var i=s.indexOf("11");//-1
+        //alert(i);
+
+        //alert(null==null);//长不等于短，反之亦然；长不等于""/null//undefined，反之亦然；undefined与undefined相等,null也是
+
+        var d = new Date();
+        alert("|"+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"|");
+
     </script>
 </head>
 <body>
