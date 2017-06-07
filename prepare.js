@@ -93,7 +93,7 @@ function cpLogo() {
 }
 
 function cp(source, target) {
-    let copyFile=function (from, to) {
+    let copyFile = function (from, to) {
         return new Promise((resolve, reject) => {
             const FileSystem = require('fs');
             const rd = FileSystem.createReadStream(from);
@@ -291,6 +291,15 @@ window.onbeforeunload = function (e) {
     let temp = app.getPath('temp');
     const path = require('path');
     let tmp = path.join(temp, 'myLogo.png');
+    delFile(tmp);
+
+    delArrFiles(tmpFiles);
+
+    //e.returnValue = false;//官方写法，与下一条二选一
+    //return false; //阻止退出
+};
+
+function delFile(tmp) {
     const fs = require('fs');
     fs.exists(tmp, function (exists) {
         if (exists) {
@@ -298,15 +307,20 @@ window.onbeforeunload = function (e) {
                 if (err) {
                     console.log("An error ocurred while delete the file " + tmp);
                     console.log(err);
-                }else {
-                    console.log(tmp + " has be deleted successfully.");
+                } else {
+                    console.log(tmp + " has been deleted successfully.");
                 }
             });
+        } else {
+            console.log("The file " + tmp + " doesn't exist.");
         }
     });
+}
 
-    while (tmpFiles.length > 0) {
-        let tmp = tmpFiles.pop();
+function delArrFiles(arr) {
+    const fs = require('fs');
+    while (arr.length > 0) {
+        let tmp = arr.pop();
         if (fs.existsSync(tmp)) {
             fs.unlink(tmp, (err) => {
                 if (err) {
@@ -314,15 +328,13 @@ window.onbeforeunload = function (e) {
                     console.log(err);
                     return;
                 }
-                console.log(tmp + " has be deleted successfully.");
+                console.log(tmp + " has been deleted successfully.");
             });
         } else {
-            console.log("This file doesn't exist, cannot delete");
+            console.log("The file " + tmp + " doesn't exist.");
         }
     }
-    //e.returnValue = false;//官方写法，与下一条二选一
-    //return false; //阻止退出
-};
+}
 
 //unzip f.exe
 //参考https://github.com/maxogden/extract-zip

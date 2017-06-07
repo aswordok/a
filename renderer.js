@@ -11,11 +11,11 @@ let myData;
 let delFile={
     delMainFile:false,
     mainFile:"",
-    adFile:[]
+    adFiles:[]
 };
-let iDur={//second
+let iDur={
     process:0,//0.no ad、1adPre、2.main、3.adPost、4.connect
-    adPre:0,
+    adPre:0,//second
     adPost:0,
     main:0
 };
@@ -28,22 +28,9 @@ function encoder(data) {
         iDur.adPre=0;
         iDur.adPost=0;
         iDur.main=0;
-        const fs = require('fs');
-        while (delFile.adFile.length > 0) {
-            let tmp = delFile.adFile.pop();
-            if (fs.existsSync(tmp)) {
-                fs.unlink(tmp, (err) => {
-                    if (err) {
-                        console.log("An error ocurred while delete the file " + tmp);
-                        console.log(err);
-                        return;
-                    }
-                    console.log(tmp + " has be deleted successfully.");
-                });
-            } else {
-                console.log("This file doesn't exist, cannot delete");
-            }
-        }
+
+        delArrFiles(delFile.adFiles);
+
         degray();
         return;
     }
@@ -108,14 +95,14 @@ function encoder(data) {
         fFullIn = adFullPreIn;
         fFullOut = adFullPre;
         plain = true;
-        delFile.adFile.push(adFullPre);
+        delFile.adFiles.push(adFullPre);
         iDur.process=1;
         console.log("Prepare for adpre.")
     } else if (adFullPost.length > 0 && !fs.existsSync(adFullPost)) {//do post
         fFullIn = adFullPostIn;
         fFullOut = adFullPost;
         plain = true;
-        delFile.adFile.push(adFullPost);
+        delFile.adFiles.push(adFullPost);
         iDur.process=3;
         console.log("Prepare for adpost.")
     } else if (mainFullPre.length > 0 && !fs.existsSync(mainFullPre)) {//do main pre
@@ -187,6 +174,7 @@ function encoder(data) {
 
     fFullIn = fFullIn.replace(/\\/g, "/");//所有反斜杠替换成正斜杠
     fFullOut = fFullOut.replace(/\\/g, "/");
+    let args;
     if (plain) {
         args = data.argsPlain;
     } else {

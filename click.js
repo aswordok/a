@@ -14,6 +14,28 @@ $().ready(function () {
     });
     $("#run").click(function () {
         gray();
+
+        let tmpAdFiles=[];
+        if ($("#checkPre").prop("checked") && $("#preAdd").val().trim().length > 0) {
+            let adFullPreIn = $("#preAdd").val().trim();
+            let adShorPre = adFullPreIn.substring(adFullPreIn.lastIndexOf("\\") + 1, adFullPreIn.lastIndexOf("."));//文件名不带后缀
+            const {app} = require('electron').remote;
+            let temp = app.getPath('temp');
+            const path = require('path');
+            let adFullPre = path.join(temp, adShorPre) + ".ts";
+            tmpAdFiles.push(adFullPre);
+        }
+        if ($("#checkPost").prop("checked") && $("#postAdd").val().trim().length > 0) {
+            let adFullPostIn = $("#postAdd").val().trim();
+            let adShorPost = adFullPostIn.substring(adFullPostIn.lastIndexOf("\\") + 1, adFullPostIn.lastIndexOf("."));
+            const {app} = require('electron').remote;
+            let temp = app.getPath('temp');
+            const path = require('path');
+            let adFullPost = path.join(temp, adShorPost) + ".ts";
+            tmpAdFiles.push(adFullPost);
+        }
+        delArrFiles(tmpAdFiles);
+
         checkRight(passRightCallEncoding);
     });
     /*$("#test").click(function () {
@@ -51,6 +73,7 @@ function gray() {//菜单变灰
     const {Menu} = remote;
     let mainMenu = Menu.getApplicationMenu();
     mainMenu.items[1].submenu.items[0].enabled =false;
+    mainMenu.items[1].submenu.items[1].enabled =true;
     //console.log("Menu:");
     //console.log(mainMenu.items[1].submenu.items[0]);
     contextMenu.items[2].enabled =false;
@@ -66,6 +89,7 @@ function degray() {//恢复菜单
     const {Menu} = remote;
     let mainMenu = Menu.getApplicationMenu();
     mainMenu.items[1].submenu.items[0].enabled = true;
+    mainMenu.items[1].submenu.items[1].enabled =false;
     contextMenu.items[2].enabled = true;
     contextMenuList.items[6].enabled = true;
 }

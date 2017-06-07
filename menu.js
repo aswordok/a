@@ -36,6 +36,7 @@ let template = [{
     }, {
         label: '中止',
         accelerator: 'CmdOrCtrl+C',
+        enabled:false,
         click: function () {
             render.killSpawn();
 
