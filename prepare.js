@@ -53,21 +53,33 @@ $().ready(function () {
         switch ($(this).val()) {
             case "UHDmp2":
                 $("#codeInfo").html(codeList[0].description);
+                $("#x").val(3000);
+                $("#y").val(1560);
                 break;
             case "UHDac3":
                 $("#codeInfo").html(codeList[1].description);
+                $("#x").val(3000);
+                $("#y").val(1560);
                 break;
             case "HDmp2":
                 $("#codeInfo").html(codeList[2].description);
+                $("#x").val(1500);
+                $("#y").val(780);
                 break;
             case "HDac3":
                 $("#codeInfo").html(codeList[3].description);
+                $("#x").val(1500);
+                $("#y").val(780);
                 break;
             case "SDts":
                 $("#codeInfo").html(codeList[4].description);
+                $("#x").val(500);
+                $("#y").val(420);
                 break;
             default:
                 $("#codeInfo").html(codeList[5].description);
+                $("#x").val(500);
+                $("#y").val(420);
         }
     });
 
