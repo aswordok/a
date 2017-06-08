@@ -12,3 +12,6 @@ http://www.w3school.com.cn/html5/html_5_webworkers.asp
 e:
 cd E:\electron\streamer\3.0
 npm run-script package
+
+JS在线打包压缩：
+http://tool.css-js.com/
