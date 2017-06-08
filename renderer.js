@@ -29,7 +29,7 @@ function encoder(data) {
         iDur.adPost=0;
         iDur.main=0;
 
-        delArrFiles(delObjFile.adFiles);
+        delArrFiles(delObjFile.adFiles);//arr传递的是指针，调用删除后本地就清空了
 
         ungray();
         return;
@@ -269,21 +269,9 @@ function act(args) {
         $("#progressWalk").prop("width","100%");
 
         if (delObjFile.delMainFile){
-            const fs = require('fs');
             let tmp=delObjFile.mainFile;
             delObjFile.mainFile="";
-            fs.exists(tmp, function (exists) {
-                if (exists) {
-                    fs.unlink(tmp, (err) => {
-                        if (err) {
-                            console.log("An error ocurred while delete the file " + tmp);
-                            console.log(err);
-                        }else {
-                            console.log(tmp + " has be deleted successfully.");
-                        }
-                    });
-                }
-            });
+            delFile(tmp);
         }
 
         encoder(myData);
