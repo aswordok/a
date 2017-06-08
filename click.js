@@ -24,6 +24,8 @@ $().ready(function () {
             const path = require('path');
             let adFullPre = path.join(temp, adShorPre) + ".ts";
             tmpAdFiles.push(adFullPre);
+            adFullPre = path.join(temp, adShorPre) + ".mpg";
+            tmpAdFiles.push(adFullPre);
         }
         if ($("#checkPost").prop("checked") && $("#postAdd").val().trim().length > 0) {
             let adFullPostIn = $("#postAdd").val().trim();
@@ -32,6 +34,8 @@ $().ready(function () {
             let temp = app.getPath('temp');
             const path = require('path');
             let adFullPost = path.join(temp, adShorPost) + ".ts";
+            tmpAdFiles.push(adFullPost);
+            adFullPost = path.join(temp, adShorPost) + ".mpg";
             tmpAdFiles.push(adFullPost);
         }
         delArrFiles(tmpAdFiles);

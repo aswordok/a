@@ -39,10 +39,10 @@ function encoder(data) {
     let ext;
     switch ($("select#codeList").val()) {
         case "SDts":
-            ext=".mpeg";
+            ext=".mpg";
             break;
         case "SDps":
-            ext=".mpeg";
+            ext=".mpg";
             break;
         default:
             ext=".ts";
@@ -135,7 +135,7 @@ function encoder(data) {
             fFullIn = tmpIn;
             const path = require('path');
             if ($("#checkOutput").prop("checked")) {
-                fFullOut = tmpPathIn + tmpShort + "_out.ts";
+                fFullOut = tmpPathIn + tmpShort + "_out" + ext;
             } else {
                 fFullOut = path.join($("#outputAdd").val().trim(), tmpShort) + "_out" + ext;//是否以\结尾均可
             }
@@ -153,7 +153,7 @@ function encoder(data) {
                 fFullIn += "|" + adFullPost;
             }
             if ($("#checkOutput").prop("checked")) {
-                fFullOut = tmpPathIn + tmpShort + "_out.ts";
+                fFullOut = tmpPathIn + tmpShort + "_out" + ext;
             } else {
                 fFullOut = path.join($("#outputAdd").val().trim(), tmpShort) + "_out" + ext;//是否以\结尾均可
             }
