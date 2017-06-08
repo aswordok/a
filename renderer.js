@@ -8,7 +8,7 @@ console.log("Start render process");
 //-y 输出覆盖
 let fProcess;
 let myData;
-let delFile={
+let delObjFile={
     delMainFile:false,
     mainFile:"",
     adFiles:[]
@@ -21,7 +21,7 @@ let iDur={
 };
 function encoder(data) {
     myData=data;
-    delFile.delMainFile=false;
+    delObjFile.delMainFile=false;
     if ($("#fileList option").length == 0 || $("#fileList option:first").val() == "dnd") {
         console.log("No item to encode.");
         iDur.process=0;
@@ -29,7 +29,7 @@ function encoder(data) {
         iDur.adPost=0;
         iDur.main=0;
 
-        delArrFiles(delFile.adFiles);
+        delArrFiles(delObjFile.adFiles);
 
         ungray();
         return;
@@ -108,14 +108,14 @@ function encoder(data) {
         fFullIn = adFullPreIn;
         fFullOut = adFullPre;
         plain = true;
-        delFile.adFiles.push(adFullPre);
+        delObjFile.adFiles.push(adFullPre);
         iDur.process=1;
         console.log("Prepare for adpre.")
     } else if (adFullPost.length > 0 && !fs.existsSync(adFullPost)) {//do post
         fFullIn = adFullPostIn;
         fFullOut = adFullPost;
         plain = true;
-        delFile.adFiles.push(adFullPost);
+        delObjFile.adFiles.push(adFullPost);
         iDur.process=3;
         console.log("Prepare for adpost.")
     } else if (mainFullPre.length > 0 && !fs.existsSync(mainFullPre)) {//do main pre
@@ -123,7 +123,7 @@ function encoder(data) {
         fFullOut = mainFullPre;
         plain = false;
         //需要清理mainFullPre---------------------------
-        delFile.mainFile=mainFullPre;
+        delObjFile.mainFile=mainFullPre;
         iDur.process=2;
         console.log("Prepare for main.")
     } else {//do 直接编码或连接
@@ -158,7 +158,7 @@ function encoder(data) {
                 fFullOut = path.join($("#outputAdd").val().trim(), tmpShort) + "_out" + ext;//是否以\结尾均可
             }
             plain = true;
-            delFile.delMainFile=true;
+            delObjFile.delMainFile=true;
             iDur.process=4;
             console.log("Start connecting the adpre+main+adpost file.");
         }
@@ -268,10 +268,10 @@ function act(args) {
         $("#progressRight").html("Complete");
         $("#progressWalk").prop("width","100%");
 
-        if (delFile.delMainFile){
+        if (delObjFile.delMainFile){
             const fs = require('fs');
-            let tmp=delFile.mainFile;
-            delFile.mainFile="";
+            let tmp=delObjFile.mainFile;
+            delObjFile.mainFile="";
             fs.exists(tmp, function (exists) {
                 if (exists) {
                     fs.unlink(tmp, (err) => {
