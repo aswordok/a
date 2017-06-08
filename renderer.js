@@ -31,8 +31,21 @@ function encoder(data) {
 
         delArrFiles(delFile.adFiles);
 
-        degray();
+        ungray();
         return;
+    }
+
+    //后缀ts or mpeg
+    let ext;
+    switch ($("select#codeList").val()) {
+        case "SDts":
+            ext=".mpeg";
+            break;
+        case "SDps":
+            ext=".mpeg";
+            break;
+        default:
+            ext=".ts";
     }
 
     let adFullPre = "";
@@ -43,7 +56,7 @@ function encoder(data) {
         const {app} = require('electron').remote;
         let temp = app.getPath('temp');
         const path = require('path');
-        adFullPre = path.join(temp, adShorPre) + ".ts";
+        adFullPre = path.join(temp, adShorPre) + ext;
         //console.log("adFullPre:")
         //console.log(adFullPre);
     } else {
@@ -59,7 +72,7 @@ function encoder(data) {
         const {app} = require('electron').remote;
         let temp = app.getPath('temp');
         const path = require('path');
-        adFullPost = path.join(temp, adShorPost) + ".ts";
+        adFullPost = path.join(temp, adShorPost) + ext;
         //console.log("adFullPost:")
         //console.log(adFullPost);
     } else {
@@ -75,10 +88,10 @@ function encoder(data) {
         let mainPathIn = mainFullIn.substr(0, mainFullIn.lastIndexOf("\\") + 1);//含最后一个\
         let tmpPathOutput = $("#outputAdd").val().trim();
         if ($("#checkOutput").prop("checked")) {
-            mainFullPre = mainPathIn + mainShortIn + "_pre.ts"
+            mainFullPre = mainPathIn + mainShortIn + "_pre" + ext;
         } else {
             const path = require('path');
-            mainFullPre = path.join(tmpPathOutput, mainShortIn) + "_pre.ts";
+            mainFullPre = path.join(tmpPathOutput, mainShortIn) + "_pre" + ext;
         }
         //console.log("mainFullPre");
         //console.log(mainFullPre);
@@ -113,7 +126,7 @@ function encoder(data) {
         delFile.mainFile=mainFullPre;
         iDur.process=2;
         console.log("Prepare for main.")
-    } else {//直接编码或连接
+    } else {//do 直接编码或连接
         let tmpIn = $("#fileList option:first").val();
         $("#fileList option:first").remove();
         let tmpShort = tmpIn.substring(tmpIn.lastIndexOf("\\") + 1, tmpIn.lastIndexOf("."));
@@ -124,7 +137,7 @@ function encoder(data) {
             if ($("#checkOutput").prop("checked")) {
                 fFullOut = tmpPathIn + tmpShort + "_out.ts";
             } else {
-                fFullOut = path.join($("#outputAdd").val().trim(), tmpShort) + "_out.ts";//是否以\结尾均可
+                fFullOut = path.join($("#outputAdd").val().trim(), tmpShort) + "_out" + ext;//是否以\结尾均可
             }
             plain = false;
             iDur.process=0;
@@ -142,7 +155,7 @@ function encoder(data) {
             if ($("#checkOutput").prop("checked")) {
                 fFullOut = tmpPathIn + tmpShort + "_out.ts";
             } else {
-                fFullOut = path.join($("#outputAdd").val().trim(), tmpShort) + "_out.ts";//是否以\结尾均可
+                fFullOut = path.join($("#outputAdd").val().trim(), tmpShort) + "_out" + ext;//是否以\结尾均可
             }
             plain = true;
             delFile.delMainFile=true;

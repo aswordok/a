@@ -80,7 +80,7 @@ function gray() {//菜单变灰
     contextMenuList.items[6].enabled =false;
 }
 
-function degray() {//恢复菜单
+function ungray() {//恢复菜单
     $("#codeList").prop("disabled", false);
     $("#run").prop("disabled", false);
     $("#setting input").prop("disabled", false);

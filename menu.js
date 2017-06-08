@@ -41,7 +41,7 @@ let template = [{
             render.killSpawn();
 
             //恢复菜单
-            degray();
+            ungray();
         }
     }]
 }, {

@@ -274,6 +274,7 @@ function passRightCallEncoding(data) {
     if (data.length == 1) {
         console.log("Can't fetch args for encoding,data.length:");
         console.log(data.length);
+        ungray();
         return;
     } else {
         let enData = data.pop();
