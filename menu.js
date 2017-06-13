@@ -67,6 +67,13 @@ let template = [{
         click: function () {
             checkRight(altRight);
         }
+    }, {
+        type: 'separator'
+    }, {
+        label: '关于',
+        click: function () {
+            about();
+        }
     }]
 }];
 

@@ -410,3 +410,12 @@ function register(id) {
         }
     });
 }
+
+function about() {
+    const {exec} = require("child_process");
+    exec("start http://lightcloud.net.cn/streamer/", function (error, stdout, stderr) {
+        if (error) {
+            console.log(error.message);
+        }
+    });
+}
