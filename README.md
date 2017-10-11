@@ -10,7 +10,7 @@ http://www.w3school.com.cn/html5/html_5_webworkers.asp
 
 打包：
 e:
-cd E:\electron\streamer\3.0
+cd E:\electron\streamer\3.1
 npm run-script package
 
 ES6转ES5:
