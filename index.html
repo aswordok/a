@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>流光 v3.0</title>
+    <title>流光 v3.1</title>
     <link href="layout.css" rel="stylesheet" type="text/css"/>
     <script>
         window.$ = window.jQuery = require('./jquery.min.js');
@@ -20,7 +20,7 @@
     </fieldset>
     <button type="button" id="upBtn">↑</button>
     <div id="cmd">
-      Author QQ:234107&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="">Help</a>
+      Author QQ:234107&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span id="help">Help</span>
       格式：<select id="codeList">
         <!--<option value="HDmp2" selected = "selected">高清TS流(mp2)</option>-->
       </select>
@@ -66,7 +66,7 @@
       <div id="progressWalk">
       </div>
       <div id="progressText">
-        <div id="progressLeft">Encoding ...</div><div id="progressMiddle">0%</div><div id="progressRight">Uncomplete</div>
+        <div id="progressLeft">Encoding ...</div><div id="progressRight">0%</div>
       </div>
     </div>
     <fieldset id="info">

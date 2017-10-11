@@ -13,8 +13,8 @@ $().ready(function () {
         type: 'get',
         dataType: "json",//xml,html,script,json,jsonp,text
         encode: "utf-8",
-        url: 'http://lightcloud.net.cn/streamer/encoder.json', // 需要提交的 url
-        // data: {refresh: Math.random()},//强制刷新
+        url: 'http://lightcloud.net.cn/streamer/encoder31.json', // 需要提交的 url
+        data: {refresh: Math.random()},//强制刷新
         success: function (data) {
             if (!window.console) {//如果console不存在，定义它的空函数
                 window.console = {
@@ -22,8 +22,8 @@ $().ready(function () {
                     }
                 };
             }
-            //console.log("Show data of code list:");
-            //console.log(JSON.stringify(data));
+            console.log("Show data of code list:");
+            console.log(JSON.stringify(data));
             let i = data.pop().default;
             codeList = data;
             for (let i in data) {
@@ -50,34 +50,40 @@ $().ready(function () {
 
     $("select#codeList").change(function () {
         console.log($(this).val());
-        switch ($(this).val()) {
-            case "UHDmp2":
+        console.log($(this).get(0).selectedIndex);
+        switch ($(this).get(0).selectedIndex) {
+            case 0:
                 $("#codeInfo").html(codeList[0].description);
                 $("#x").val(3000);
                 $("#y").val(1560);
                 break;
-            case "UHDac3":
+            case 1:
                 $("#codeInfo").html(codeList[1].description);
                 $("#x").val(3000);
                 $("#y").val(1560);
                 break;
-            case "HDmp2":
+            case 2:
                 $("#codeInfo").html(codeList[2].description);
                 $("#x").val(1500);
                 $("#y").val(780);
                 break;
-            case "HDac3":
+            case 3:
                 $("#codeInfo").html(codeList[3].description);
                 $("#x").val(1500);
                 $("#y").val(780);
                 break;
-            case "SDts":
+            case 4:
                 $("#codeInfo").html(codeList[4].description);
                 $("#x").val(500);
                 $("#y").val(420);
                 break;
-            default:
+            case 5:
                 $("#codeInfo").html(codeList[5].description);
+                $("#x").val(500);
+                $("#y").val(420);
+                break;
+            default:
+                $("#codeInfo").html(codeList[6].description);
                 $("#x").val(500);
                 $("#y").val(420);
         }
@@ -196,7 +202,7 @@ function checkRight(callback) {
     let rotateVal = $("#rotation input:checked").val();
     let args = {
         machineId: getMachineId(),
-        ver: "3.0",
+        ver: "3.1",
         code: $("#codeList").val(),
         rotate: rotateVal == undefined ? "" : rotateVal,
         putLogo: $("#checkLogo").prop("checked") && $("#logoAdd").val().trim().length > 0 ? true : false,
@@ -208,7 +214,7 @@ function checkRight(callback) {
         type: 'get',
         dataType: "json",//xml,html,script,json,jsonp,text
         encode: "utf-8",
-        url: 'http://lightcloud.net.cn/streamer/access.js', // 需要提交的 url
+        url: 'http://lightcloud.net.cn/streamer/access31.js', // 需要提交的 url
         data: args,
         success: function (data) {
             if (!window.console) {//如果console不存在，定义它的空函数

@@ -66,6 +66,10 @@ $().ready(function () {
     $("#outputBtn").click(function () {
         fillOutput();
     });
+
+    $("#help").click(function () {
+        help();
+    });
 });
 
 function gray() {//菜单变灰

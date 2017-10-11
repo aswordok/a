@@ -38,7 +38,10 @@ function encoder(data) {
     //后缀ts or mpeg
     let ext;
     switch ($("select#codeList").val()) {
-        case "SDts":
+        case "SDtsLive":
+            ext=".mpg";
+            break;
+        case "SDtsVOD":
             ext=".mpg";
             break;
         case "SDps":
@@ -165,9 +168,8 @@ function encoder(data) {
     }
 
     //处理进度条
-    $("#progressRight").html("Uncomplete");
     $("#progressWalk").prop("width","0.1%");
-    $("#progressMiddle").html("0%");
+    $("#progressRight").html("0%");
     let nowDoWithArr=fFullIn.split("|");
     if (nowDoWithArr.length==1){
         let nowDoWith=fFullIn.substr(fFullIn.lastIndexOf("\\")+1);//取文件名
@@ -255,7 +257,7 @@ function act(args) {
                 let j=parseInt(a[0])*3600+parseInt(a[1])*60+parseInt(a[2]);
                 let p=Math.round(j/iCur*100);
                 console.log("Current time:"+t+"="+j+"s,percent:"+p+"%");
-                $("#progressMiddle").html(p+"%");
+                $("#progressRight").html(p+"%");
                 $("#progressWalk").width(p+"%");
             }
         }
@@ -264,8 +266,7 @@ function act(args) {
     fProcess.on('close', (code) => {
         console.log(`子进程退出码：${code}`);
 
-        $("#progressMiddle").html("100%");
-        $("#progressRight").html("Complete");
+        $("#progressRight").html("100%");
         $("#progressWalk").prop("width","100%");
 
         if (delObjFile.delMainFile){
