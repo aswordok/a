@@ -1,6 +1,6 @@
 {
   "name": "streamer",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "A TS stream encoder",
   "main": "main.js",
   "scripts": {
